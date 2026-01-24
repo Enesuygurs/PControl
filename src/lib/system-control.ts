@@ -9,3 +9,8 @@ export type PowerAction = "sleep" | "shutdown" | "restart" | "hibernate" | "lock
  * Persistent PowerShell bridge to avoid sub-process startup lag (approx 150ms).
  */
 class PowerShellBridge {
+  private child: any;
+  private isReady: boolean = false;
+  private queue: string[] = [];
+
+  constructor() {
