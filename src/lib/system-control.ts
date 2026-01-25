@@ -14,3 +14,8 @@ class PowerShellBridge {
   private queue: string[] = [];
 
   constructor() {
+    this.init();
+  }
+
+  private init() {
+    try {
