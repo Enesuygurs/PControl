@@ -47,3 +47,15 @@ import {
   Link,
   Timer,
   CircleOff,
+  Shield,
+  ShieldAlert,
+  Mic,
+  StickyNote as NoteIcon,
+  AlertTriangle,
+  FolderOpen
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import FileExplorer from "@/components/FileExplorer";
+

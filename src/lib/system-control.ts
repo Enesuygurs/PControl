@@ -19,3 +19,8 @@ class PowerShellBridge {
 
   private init() {
     try {
+      this.child = spawn("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", "-"]);
+      this.child.stdin.setEncoding("utf-8");
+      
+      // Force UTF-8 Encoding for Turkish characters support
+      this.child.stdin.write("[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.Encoding]::UTF8;\n");
