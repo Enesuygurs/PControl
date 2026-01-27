@@ -59,3 +59,15 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import FileExplorer from "@/components/FileExplorer";
 
+interface SystemStatus {
+  cpu: number;
+  memory: number;
+  brightness: number;
+  volume: number;
+  isMuted: boolean;
+  disk: {
+    mount: string;
+    total: number;
+    used: number;
+    percentage: number;
+  }[];

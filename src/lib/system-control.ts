@@ -24,3 +24,8 @@ class PowerShellBridge {
       
       // Force UTF-8 Encoding for Turkish characters support
       this.child.stdin.write("[Console]::InputEncoding = [Console]::OutputEncoding = $OutputEncoding = [System.Text.Encoding]::UTF8;\n");
+      
+      // Pre-load common types
+      this.child.stdin.write("Add-Type -AssemblyName System.Windows.Forms, System.Drawing;\n");
+      
+      this.isReady = true;
