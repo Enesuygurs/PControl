@@ -71,3 +71,15 @@ interface SystemStatus {
     used: number;
     percentage: number;
   }[];
+  temp: number;
+  hostname: string;
+  ip: string;
+  uptime: number;
+  rxSpeed: number;
+  txSpeed: number;
+  wifi: number;
+  audioDevices?: { Index: number; Name: string; Default: boolean }[];
+  media: {
+    Title: string;
+    Artist: string;
+  } | null;

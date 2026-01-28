@@ -29,3 +29,8 @@ class PowerShellBridge {
       this.child.stdin.write("Add-Type -AssemblyName System.Windows.Forms, System.Drawing;\n");
       
       this.isReady = true;
+
+      this.child.stderr.on("data", (data: any) => {
+         console.error("PS Bridge Error:", data.toString());
+      });
+
