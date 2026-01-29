@@ -34,3 +34,8 @@ class PowerShellBridge {
          console.error("PS Bridge Error:", data.toString());
       });
 
+      this.child.on("exit", () => {
+         this.isReady = false;
+         setTimeout(() => this.init(), 1000); 
+      });
+    } catch (e) {
