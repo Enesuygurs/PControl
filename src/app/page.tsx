@@ -95,3 +95,15 @@ const container = {
     }
   }
 };
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
+
+export default function ControlPanel() {
+  const [status, setStatus] = useState<SystemStatus | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [powerAction, setPowerAction] = useState<string | null>(null);
+  const [showQR, setShowQR] = useState(false);

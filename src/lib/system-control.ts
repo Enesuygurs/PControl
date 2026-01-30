@@ -39,3 +39,8 @@ class PowerShellBridge {
          setTimeout(() => this.init(), 1000); 
       });
     } catch (e) {
+      console.error("Failed to init PS Bridge:", e);
+    }
+  }
+
+  public send(script: string) {
