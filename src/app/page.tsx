@@ -107,3 +107,15 @@ export default function ControlPanel() {
   const [refreshing, setRefreshing] = useState(false);
   const [powerAction, setPowerAction] = useState<string | null>(null);
   const [showQR, setShowQR] = useState(false);
+  const [cmdInput, setCmdInput] = useState("");
+  const [kbInput, setKbInput] = useState("");
+  const [clipInput, setClipInput] = useState("");
+  const [urlInput, setUrlInput] = useState("");
+  const [stickyInput, setStickyInput] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const [screenshot, setScreenshot] = useState<string | null>(null);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [cmdLog, setCmdLog] = useState<{ cmd: string; output: string }[]>([]);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [showFileExplorer, setShowFileExplorer] = useState(false);
+  const [isUnlocked, setIsUnlocked] = useState(false);

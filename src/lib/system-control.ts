@@ -44,3 +44,8 @@ class PowerShellBridge {
   }
 
   public send(script: string) {
+    if (this.isReady) {
+       this.child.stdin.write(script + "\n");
+    }
+  }
+
