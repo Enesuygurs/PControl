@@ -119,3 +119,15 @@ export default function ControlPanel() {
   const [isExecuting, setIsExecuting] = useState(false);
   const [showFileExplorer, setShowFileExplorer] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [pinInput, setPinInput] = useState("");
+  const [showPinPad, setShowPinPad] = useState(false);
+
+  const lastMousePos = useRef<{ x: number, y: number } | null>(null);
+  const mouseThrottle = useRef<any>(null);
+  const debounceRef = useRef<any>(null);
+
+  // Tap-to-click tracking
+  const touchStartInfo = useRef<{ time: number; x: number; y: number; maxFingers: number; isMove: boolean } | null>(null);
+
+  const fetchStatus = useCallback(async (isManual = false) => {
+    if (isManual) setRefreshing(true);

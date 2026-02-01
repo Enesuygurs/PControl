@@ -49,3 +49,8 @@ class PowerShellBridge {
     }
   }
 
+  public async execute(script: string): Promise<string> {
+    return runPowerShellOneShot(script);
+  }
+}
+
