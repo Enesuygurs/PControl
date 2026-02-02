@@ -54,3 +54,8 @@ class PowerShellBridge {
   }
 }
 
+// Global singleton for Next.js hot-reloading stability
+const globalWithPS = global as typeof globalThis & { psBridge?: PowerShellBridge };
+const psBridge = globalWithPS.psBridge || new PowerShellBridge();
+if (process.env.NODE_ENV !== "production") globalWithPS.psBridge = psBridge;
+

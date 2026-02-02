@@ -131,3 +131,15 @@ export default function ControlPanel() {
 
   const fetchStatus = useCallback(async (isManual = false) => {
     if (isManual) setRefreshing(true);
+    try {
+      const res = await fetch("/api/status");
+      if (!res.ok) throw new Error("Status error");
+      const data = await res.json();
+      setStatus(data);
+      if (isManual) toast.success("System status updated");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to refresh status");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
