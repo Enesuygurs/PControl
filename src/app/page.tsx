@@ -143,3 +143,15 @@ export default function ControlPanel() {
     } finally {
       setLoading(false);
       setRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStatus();
+    if (typeof window !== "undefined" && localStorage.getItem("pcontrol_unlocked") === "true") {
+      setIsUnlocked(true);
+    }
+  }, [fetchStatus]);
+
+  const sendControl = async (action: string, value?: any, debounce = false) => {
+    if (!isUnlocked) return toast.error("System Locked");

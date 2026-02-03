@@ -59,3 +59,8 @@ const globalWithPS = global as typeof globalThis & { psBridge?: PowerShellBridge
 const psBridge = globalWithPS.psBridge || new PowerShellBridge();
 if (process.env.NODE_ENV !== "production") globalWithPS.psBridge = psBridge;
 
+async function runPowerShellOneShot(script: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const child = spawn("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", "-"], {
+      stdio: ["pipe", "pipe", "pipe"],
+    });
