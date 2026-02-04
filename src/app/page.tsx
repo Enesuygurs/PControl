@@ -155,3 +155,15 @@ export default function ControlPanel() {
 
   const sendControl = async (action: string, value?: any, debounce = false) => {
     if (!isUnlocked) return toast.error("System Locked");
+    // Optimistic Update: Hemen yansıt ki kullanıcı slider'da gecikme hissetmesin
+    if (status) {
+      if (action === "volume") setStatus({ ...status, volume: value });
+      if (action === "brightness") setStatus({ ...status, brightness: value });
+      if (action === "mute") setStatus({ ...status, isMuted: value });
+    }
+
+    if (debounce) {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(async () => {
+        await executeControl(action, value);
+      }, 1000); // Gecikmeyi 1 saniyeye çıkarttım ki kesin tek komut gitsin

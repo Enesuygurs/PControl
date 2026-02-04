@@ -64,3 +64,8 @@ async function runPowerShellOneShot(script: string): Promise<string> {
     const child = spawn("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", "-"], {
       stdio: ["pipe", "pipe", "pipe"],
     });
+
+    let stdout = "";
+    let stderr = "";
+
+    child.stdout.on("data", (data) => { stdout += data.toString(); });
