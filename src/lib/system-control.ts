@@ -69,3 +69,8 @@ async function runPowerShellOneShot(script: string): Promise<string> {
     let stderr = "";
 
     child.stdout.on("data", (data) => { stdout += data.toString(); });
+    child.stderr.on("data", (data) => { stderr += data.toString(); });
+
+    child.on("close", (code) => {
+      if (code !== 0) reject(new Error(`Exit ${code}: ${stderr}`));
+      else resolve(stdout.trim());

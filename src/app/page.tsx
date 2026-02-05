@@ -167,3 +167,15 @@ export default function ControlPanel() {
       debounceRef.current = setTimeout(async () => {
         await executeControl(action, value);
       }, 1000); // Gecikmeyi 1 saniyeye çıkarttım ki kesin tek komut gitsin
+    } else {
+      await executeControl(action, value);
+    }
+  };
+
+  const executeControl = async (action: string, value?: any) => {
+    if (!isUnlocked) return toast.error("System Locked");
+    try {
+      const res = await fetch("/api/control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, value }),
