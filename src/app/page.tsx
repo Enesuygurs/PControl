@@ -179,3 +179,15 @@ export default function ControlPanel() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, value }),
+      });
+      if (!res.ok) throw new Error("Control error");
+
+      toast.success(`${action.charAt(0).toUpperCase() + action.slice(1)} synchronized`, {
+        description: value !== undefined ? `Value: ${value}` : undefined,
+        duration: 1500
+      });
+    } catch (err) {
+      toast.error("Failed to sync system state");
+    }
+  };
+

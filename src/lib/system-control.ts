@@ -74,3 +74,8 @@ async function runPowerShellOneShot(script: string): Promise<string> {
     child.on("close", (code) => {
       if (code !== 0) reject(new Error(`Exit ${code}: ${stderr}`));
       else resolve(stdout.trim());
+    });
+
+    child.stdin.write(script);
+    child.stdin.end();
+  });
