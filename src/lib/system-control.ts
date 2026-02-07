@@ -79,3 +79,8 @@ async function runPowerShellOneShot(script: string): Promise<string> {
     child.stdin.write(script);
     child.stdin.end();
   });
+}
+
+/**
+ * Standard PowerShell execution.
+ */

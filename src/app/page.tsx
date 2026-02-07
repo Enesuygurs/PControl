@@ -191,3 +191,15 @@ export default function ControlPanel() {
     }
   };
 
+  const handlePower = async (action: string) => {
+    if (powerAction === action) {
+      await sendControl("power", action);
+      setPowerAction(null);
+    } else {
+      setPowerAction(action);
+      setTimeout(() => setPowerAction(null), 3000);
+    }
+  };
+
+  const handleTerminal = async (e: React.FormEvent) => {
+    e.preventDefault();
