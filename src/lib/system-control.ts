@@ -84,3 +84,8 @@ async function runPowerShellOneShot(script: string): Promise<string> {
 /**
  * Standard PowerShell execution.
  */
+export async function runPowerShell(script: string): Promise<string> {
+  return runPowerShellOneShot(script);
+}
+
+// Global virtual volume state for getVolume() sync

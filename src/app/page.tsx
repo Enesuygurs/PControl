@@ -203,3 +203,15 @@ export default function ControlPanel() {
 
   const handleTerminal = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isUnlocked) return toast.error("System Locked");
+    if (!cmdInput.trim() || isExecuting) return;
+
+    setIsExecuting(true);
+    const currentCmd = cmdInput;
+    setCmdInput("");
+
+    try {
+      const res = await fetch("/api/control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "cmd", value: currentCmd }),
