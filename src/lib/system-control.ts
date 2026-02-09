@@ -89,3 +89,8 @@ export async function runPowerShell(script: string): Promise<string> {
 }
 
 // Global virtual volume state for getVolume() sync
+let virtualVolume = 50;
+
+/**
+ * SET VOLUME (0-100)
+ */

@@ -215,3 +215,15 @@ export default function ControlPanel() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "cmd", value: currentCmd }),
+      });
+      const data = await res.json();
+      setCmdLog(prev => [{ cmd: currentCmd, output: data.output || "No output" }, ...prev].slice(0, 10));
+    } catch (err) {
+      setCmdLog(prev => [{ cmd: currentCmd, output: "Execution failed" }, ...prev].slice(0, 10));
+    } finally {
+      setIsExecuting(false);
+    }
+  };
+
+  const accumulatedMove = useRef({ dx: 0, dy: 0 });
+
