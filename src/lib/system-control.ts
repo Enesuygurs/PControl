@@ -94,3 +94,8 @@ let virtualVolume = 50;
 /**
  * SET VOLUME (0-100)
  */
+export async function setVolume(level: number): Promise<void> {
+  const p = Math.max(0, Math.min(100, level));
+  virtualVolume = p;
+  
+  // Bulletproof Reset-to-Zero then Step-Up loop

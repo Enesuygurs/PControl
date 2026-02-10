@@ -227,3 +227,15 @@ export default function ControlPanel() {
 
   const accumulatedMove = useRef({ dx: 0, dy: 0 });
 
+  const isMoving = useRef(false);
+
+  const handleMouseMove = (dx: number, dy: number) => {
+    if (!isUnlocked) return;
+    accumulatedMove.current.dx += dx;
+    accumulatedMove.current.dy += dy;
+
+    if (isMoving.current) return;
+
+    isMoving.current = true;
+    setTimeout(async () => {
+      const sendX = Math.round(accumulatedMove.current.dx);
