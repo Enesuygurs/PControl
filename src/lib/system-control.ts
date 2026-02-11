@@ -99,3 +99,8 @@ export async function setVolume(level: number): Promise<void> {
   virtualVolume = p;
   
   // Bulletproof Reset-to-Zero then Step-Up loop
+  // Each key is 2%, so 50 is 100%
+  const steps = Math.floor(p / 2);
+  const script = `
+    $w = New-Object -ComObject WScript.Shell;
+    for($i=0; $i -lt 50; $i++) { $w.SendKeys([char]174) }; 

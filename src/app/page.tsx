@@ -239,3 +239,15 @@ export default function ControlPanel() {
     isMoving.current = true;
     setTimeout(async () => {
       const sendX = Math.round(accumulatedMove.current.dx);
+      const sendY = Math.round(accumulatedMove.current.dy);
+      accumulatedMove.current = { dx: 0, dy: 0 };
+
+      if (Math.abs(sendX) > 0 || Math.abs(sendY) > 0) {
+        await fetch("/api/control", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "mouse", value: { dx: sendX, dy: sendY } }),
+          keepalive: true
+        });
+      }
+      isMoving.current = false;
