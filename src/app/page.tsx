@@ -251,3 +251,15 @@ export default function ControlPanel() {
         });
       }
       isMoving.current = false;
+    }, 20);
+  };
+
+  const handleMouseClick = (b: string) => executeControl("mouse", b);
+
+  const handleKeyboard = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!kbInput) return;
+    await executeControl("keyboard", kbInput);
+    setKbInput("");
+  };
+

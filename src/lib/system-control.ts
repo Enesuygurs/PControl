@@ -104,3 +104,8 @@ export async function setVolume(level: number): Promise<void> {
   const script = `
     $w = New-Object -ComObject WScript.Shell;
     for($i=0; $i -lt 50; $i++) { $w.SendKeys([char]174) }; 
+    for($i=0; $i -lt ${steps}; $i++) { $w.SendKeys([char]175) };
+  `;
+  psBridge.send(script);
+}
+
