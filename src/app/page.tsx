@@ -263,3 +263,15 @@ export default function ControlPanel() {
     setKbInput("");
   };
 
+  const handleCaptureScreenshot = async () => {
+    if (!isUnlocked) return toast.error("System Locked");
+    setIsCapturing(true);
+    try {
+      const res = await fetch("/api/control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "screenshot" }),
+      });
+      const data = await res.json();
+      if (data.output) setScreenshot(data.output);
+    } catch (e) {

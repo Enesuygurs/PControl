@@ -109,3 +109,8 @@ export async function setVolume(level: number): Promise<void> {
   psBridge.send(script);
 }
 
+/**
+ * GET VOLUME (0-100)
+ */
+export async function getVolume(): Promise<number> {
+  // Return virtual state for consistent UI
