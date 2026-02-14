@@ -114,3 +114,8 @@ export async function setVolume(level: number): Promise<void> {
  */
 export async function getVolume(): Promise<number> {
   // Return virtual state for consistent UI
+  return virtualVolume;
+}
+
+/**
+ * MUTE / UNMUTE

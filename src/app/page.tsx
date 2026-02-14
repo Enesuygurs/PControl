@@ -275,3 +275,15 @@ export default function ControlPanel() {
       const data = await res.json();
       if (data.output) setScreenshot(data.output);
     } catch (e) {
+      toast.error("Failed to capture screen");
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
+  const handleClipboard = async (action: "get" | "set") => {
+    if (!isUnlocked) return toast.error("System Locked");
+    try {
+      if (action === "get") {
+        const res = await fetch("/api/control", {
+          method: "POST",
