@@ -287,3 +287,15 @@ export default function ControlPanel() {
       if (action === "get") {
         const res = await fetch("/api/control", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "get-clipboard" }),
+        });
+        const data = await res.json();
+        setClipInput(data.output || "");
+        toast.success("Clipboard pulled from PC");
+      } else {
+        await fetch("/api/control", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "set-clipboard", value: clipInput }),
+        });

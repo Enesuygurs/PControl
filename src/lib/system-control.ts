@@ -119,3 +119,8 @@ export async function getVolume(): Promise<number> {
 
 /**
  * MUTE / UNMUTE
+ */
+export async function setMute(mute: boolean): Promise<void> {
+  psBridge.send(`(New-Object -ComObject WScript.Shell).SendKeys([char]173)`);
+}
+
