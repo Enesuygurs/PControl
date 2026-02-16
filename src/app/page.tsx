@@ -299,3 +299,15 @@ export default function ControlPanel() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "set-clipboard", value: clipInput }),
         });
+        toast.success("Clipboard pushed to PC");
+      }
+    } catch (e) {
+      toast.error("Clipboard sync failed");
+    }
+  };
+
+  const handleUrlPush = async () => {
+    if (!isUnlocked) return toast.error("System Locked");
+    if (!urlInput.trim()) return;
+    try {
+      await fetch("/api/control", {

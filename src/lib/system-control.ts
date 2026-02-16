@@ -124,3 +124,8 @@ export async function setMute(mute: boolean): Promise<void> {
   psBridge.send(`(New-Object -ComObject WScript.Shell).SendKeys([char]173)`);
 }
 
+export async function isMuted(): Promise<boolean> {
+  return false; // Toggle-style key (173) doesn't provide state without Core Audio
+}
+
+/**
