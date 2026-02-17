@@ -311,3 +311,15 @@ export default function ControlPanel() {
     if (!urlInput.trim()) return;
     try {
       await fetch("/api/control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "open-url", value: urlInput }),
+      });
+      setUrlInput("");
+      toast.success("URL pushed to PC browser");
+    } catch (e) {
+      toast.error("URL push failed");
+    }
+  };
+
+  const handleShutdownTimer = async (val: number | "cancel") => {

@@ -129,3 +129,8 @@ export async function isMuted(): Promise<boolean> {
 }
 
 /**
+ * ADVANCED AUDIO DEVICE MANAGEMENT
+ */
+export async function getAudioDevices(): Promise<{ Index: number; Name: string; Default: boolean }[]> {
+  try {
+    const script = `
