@@ -323,3 +323,15 @@ export default function ControlPanel() {
   };
 
   const handleShutdownTimer = async (val: number | "cancel") => {
+    if (!isUnlocked) return toast.error("System Locked");
+    try {
+      await fetch("/api/control", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "shutdown-timer", value: val }),
+      });
+      if (val === "cancel") toast.success("Shutdown cancelled");
+      else toast.success(`Shutdown scheduled in ${val} minutes`);
+    } catch (e) {
+      toast.error("Timer setup failed");
+    }

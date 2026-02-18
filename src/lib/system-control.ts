@@ -134,3 +134,8 @@ export async function isMuted(): Promise<boolean> {
 export async function getAudioDevices(): Promise<{ Index: number; Name: string; Default: boolean }[]> {
   try {
     const script = `
+      Import-Module ./AudioDeviceCmdlets.dll -ErrorAction SilentlyContinue;
+      Get-AudioDevice -List | Where-Object { $_.Type -eq 'Playback' } | Select-Object Index, Name, Default | ConvertTo-Json
+    `;
+    const res = await runPowerShell(script);
+    if (!res) return [];
