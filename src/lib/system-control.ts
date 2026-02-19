@@ -139,3 +139,8 @@ export async function getAudioDevices(): Promise<{ Index: number; Name: string; 
     `;
     const res = await runPowerShell(script);
     if (!res) return [];
+    
+    const parsed = JSON.parse(res);
+    // Unify to array if JSON returns a single object
+    const devices = Array.isArray(parsed) ? parsed : [parsed];
+    
