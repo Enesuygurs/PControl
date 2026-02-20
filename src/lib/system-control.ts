@@ -144,3 +144,8 @@ export async function getAudioDevices(): Promise<{ Index: number; Name: string; 
     // Unify to array if JSON returns a single object
     const devices = Array.isArray(parsed) ? parsed : [parsed];
     
+    // Clean up names (e.g., "Kulaklıklar (Realtek(R) Audio)" -> "Kulaklıklar")
+    return devices.map((d: any) => ({
+       Index: d.Index,
+       Name: d.Name.split(" (")[0], 
+       Default: d.Default

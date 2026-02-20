@@ -347,3 +347,15 @@ export default function ControlPanel() {
         body: JSON.stringify({ action: "sticky-note", value: stickyInput }),
       });
       setStickyInput("");
+      toast.success("Sticky note sent to PC");
+    } catch (e) {
+      toast.error("Sticky note failed");
+    }
+  };
+
+  const handleVoiceCommand = () => {
+    if (!isUnlocked) return toast.error("System Locked");
+    const Speech = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!Speech) {
+      toast.error("Speech Recognition not supported on this browser.");
+      return;
