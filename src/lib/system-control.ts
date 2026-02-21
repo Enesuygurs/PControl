@@ -149,3 +149,8 @@ export async function getAudioDevices(): Promise<{ Index: number; Name: string; 
        Index: d.Index,
        Name: d.Name.split(" (")[0], 
        Default: d.Default
+    }));
+  } catch (e) {
+    console.error("Audio Devices fetch failed:", e);
+    return [];
+  }

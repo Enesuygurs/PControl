@@ -359,3 +359,15 @@ export default function ControlPanel() {
     if (!Speech) {
       toast.error("Speech Recognition not supported on this browser.");
       return;
+    }
+
+    const recognition = new Speech();
+    recognition.lang = "tr-TR";
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+
+    recognition.onresult = async (event: any) => {
+      const command = event.results[0][0].transcript.toLowerCase();
+      toast.info(`Heard: "${command}"`);
+
+      // Simple Command Mapping
