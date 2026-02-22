@@ -154,3 +154,8 @@ export async function getAudioDevices(): Promise<{ Index: number; Name: string; 
     console.error("Audio Devices fetch failed:", e);
     return [];
   }
+}
+
+export async function setAudioDevice(index: number): Promise<void> {
+  const script = `
+    Import-Module ./AudioDeviceCmdlets.dll -ErrorAction SilentlyContinue;

@@ -371,3 +371,15 @@ export default function ControlPanel() {
       toast.info(`Heard: "${command}"`);
 
       // Simple Command Mapping
+      if (command.includes("youtube") || command.includes("izle")) {
+        const query = command.replace(/youtube|da|de|izle|aç|arattır/g, "").trim();
+        await fetch("/api/control", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "open-url", value: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}` }),
+        });
+      } else if (command.includes("google") || command.includes("ara")) {
+        const query = command.replace(/google|da|de|ara|arattır/g, "").trim();
+        await fetch("/api/control", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
