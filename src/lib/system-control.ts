@@ -159,3 +159,8 @@ export async function getAudioDevices(): Promise<{ Index: number; Name: string; 
 export async function setAudioDevice(index: number): Promise<void> {
   const script = `
     Import-Module ./AudioDeviceCmdlets.dll -ErrorAction SilentlyContinue;
+    Set-AudioDevice -Index ${index}
+  `;
+  await runPowerShell(script);
+}
+

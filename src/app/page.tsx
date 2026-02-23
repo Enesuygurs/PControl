@@ -383,3 +383,15 @@ export default function ControlPanel() {
         await fetch("/api/control", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "open-url", value: `https://www.google.com/search?q=${encodeURIComponent(query)}` }),
+        });
+      } else if (command.includes("uyku") || command.includes("kapat")) {
+        handlePower("sleep");
+      } else if (command.includes("müzik") || command.includes("şarkı")) {
+        sendControl("media", "playpause");
+      }
+    };
+
+    recognition.start();
+  };
+
