@@ -164,3 +164,8 @@ export async function setAudioDevice(index: number): Promise<void> {
   await runPowerShell(script);
 }
 
+/**
+ * SET BRIGHTNESS (0-100)
+ */
+export async function setBrightness(level: number): Promise<void> {
+  const b = Math.max(0, Math.min(100, level));

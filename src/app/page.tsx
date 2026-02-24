@@ -395,3 +395,15 @@ export default function ControlPanel() {
     recognition.start();
   };
 
+  if (loading && !status) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-950">
+        <div className="relative">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+            className="h-24 w-24 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full"
+          />
+          <div className="absolute inset-0 flex items-center justify-center text-[10px] font-black uppercase tracking-widest text-indigo-500">
+            Scanning
+          </div>
