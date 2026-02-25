@@ -169,3 +169,8 @@ export async function setAudioDevice(index: number): Promise<void> {
  */
 export async function setBrightness(level: number): Promise<void> {
   const b = Math.max(0, Math.min(100, level));
+  try {
+    await runPowerShell(`(Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods).WmiSetBrightness(1, ${b})`);
+  } catch (e) {
+    console.warn("WMI Brightness set failed.");
+  }
