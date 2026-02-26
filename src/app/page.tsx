@@ -419,3 +419,15 @@ export default function ControlPanel() {
         <main className="space-y-6 md:space-y-8">
           {/* Header Section */}
           <header className={cn(
+            "flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 md:p-8 rounded-[2.5rem] bg-zinc-900/20 border border-white/5 backdrop-blur-3xl relative group transition-all duration-300",
+            showQR ? "z-[60]" : "z-10"
+          )}>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none rounded-[2.5rem]" />
+            <div className="flex items-center gap-6 relative">
+              <div className="relative">
+                <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20">
+                  <Monitor className="w-8 h-8 text-primary" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[#050507] animate-pulse" />
+              </div>
+              <div>

@@ -174,3 +174,8 @@ export async function setBrightness(level: number): Promise<void> {
   } catch (e) {
     console.warn("WMI Brightness set failed.");
   }
+}
+
+/**
+ * GET BRIGHTNESS (0-100)
+ */
