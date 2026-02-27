@@ -431,3 +431,15 @@ export default function ControlPanel() {
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[#050507] animate-pulse" />
               </div>
               <div>
+                <h1 className="text-3xl font-bold tracking-tight font-sora">{status?.hostname || "Workstation"}</h1>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-zinc-800/50 border border-white/5 text-[10px] font-bold text-zinc-400 whitespace-nowrap">
+                    <Wifi className="w-3 h-3 text-primary" />
+                    {status?.ip || "Local Node"}
+                  </div>
+                  <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-zinc-800/50 border border-white/5 text-[10px] font-bold text-zinc-400 whitespace-nowrap">
+                    <Tally3 className="w-3 h-3 text-primary" />
+                    UPTIME: {Math.floor((status?.uptime || 0) / 3600)}H
+                  </div>
+                </div>
+              </div>
