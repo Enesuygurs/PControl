@@ -443,3 +443,15 @@ export default function ControlPanel() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="flex items-center justify-between md:justify-end gap-4 relative w-full md:w-auto">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    if (isUnlocked) {
+                      setIsUnlocked(false);
+                      setShowPinPad(false);
+                      if (typeof window !== "undefined") localStorage.removeItem("pcontrol_unlocked");
+                      toast.success("System Locked");
+                    } else {

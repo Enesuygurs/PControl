@@ -184,3 +184,8 @@ export async function getBrightness(): Promise<number> {
     const result = await runPowerShell("(Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightness).CurrentBrightness");
     return parseInt(result) || 50;
   } catch (e) {
+    return 50;
+  }
+}
+
+/**
