@@ -455,3 +455,15 @@ export default function ControlPanel() {
                       if (typeof window !== "undefined") localStorage.removeItem("pcontrol_unlocked");
                       toast.success("System Locked");
                     } else {
+                      setShowPinPad(!showPinPad);
+                    }
+                  }}
+                  className={cn(
+                    "p-4 rounded-2xl border transition-all shadow-lg",
+                    isUnlocked
+                      ? "bg-green-500/10 border-green-500/20 text-green-500 hover:bg-green-500/20"
+                      : showPinPad
+                        ? "bg-red-500/10 border-red-500/20 text-red-500 ring-2 ring-red-500/20"
+                        : "bg-zinc-800/50 border-white/5 text-zinc-400 hover:text-red-500"
+                  )}
+                  title={isUnlocked ? "Lock System" : "Unlock System"}

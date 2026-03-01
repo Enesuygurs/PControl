@@ -189,3 +189,8 @@ export async function getBrightness(): Promise<number> {
 }
 
 /**
+ * POWER ACTIONS
+ */
+export async function executePowerAction(action: PowerAction): Promise<void> {
+  switch (action) {
+    case "shutdown":
