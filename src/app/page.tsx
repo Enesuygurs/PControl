@@ -467,3 +467,15 @@ export default function ControlPanel() {
                         : "bg-zinc-800/50 border-white/5 text-zinc-400 hover:text-red-500"
                   )}
                   title={isUnlocked ? "Lock System" : "Unlock System"}
+                >
+                  {isUnlocked ? <Unlock className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
+                </button>
+
+                <div className="relative">
+                  <button
+                    onClick={() => setShowQR(!showQR)}
+                    className={cn(
+                      "p-4 rounded-2xl bg-zinc-800/50 border border-white/5 text-zinc-400 hover:text-primary transition-all shadow-lg",
+                      showQR && "bg-primary/10 text-primary border-primary/20 ring-2 ring-primary/20"
+                    )}
+                  >

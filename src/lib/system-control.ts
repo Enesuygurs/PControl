@@ -194,3 +194,8 @@ export async function getBrightness(): Promise<number> {
 export async function executePowerAction(action: PowerAction): Promise<void> {
   switch (action) {
     case "shutdown":
+      await runPowerShell("stop-computer -force");
+      break;
+    case "restart":
+      await runPowerShell("restart-computer -force");
+      break;
