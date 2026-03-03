@@ -479,3 +479,15 @@ export default function ControlPanel() {
                       showQR && "bg-primary/10 text-primary border-primary/20 ring-2 ring-primary/20"
                     )}
                   >
+                    <QrCode className="w-6 h-6" />
+                  </button>
+
+                  <AnimatePresence>
+                    {showQR && status?.ip && (
+                      <>
+                        {/* Mobile Backdrop for fixed modal */}
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          onClick={() => setShowQR(false)}

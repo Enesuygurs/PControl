@@ -199,3 +199,8 @@ export async function executePowerAction(action: PowerAction): Promise<void> {
     case "restart":
       await runPowerShell("restart-computer -force");
       break;
+    case "sleep":
+      await runPowerShell("Add-Type -Assembly System.Windows.Forms; [System.Windows.Forms.Application]::SetSuspendState('Suspend', $false, $true)");
+      break;
+    case "hibernate":
+      await runPowerShell("Add-Type -Assembly System.Windows.Forms; [System.Windows.Forms.Application]::SetSuspendState('Hibernate', $false, $true)");
