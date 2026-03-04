@@ -204,3 +204,8 @@ export async function executePowerAction(action: PowerAction): Promise<void> {
       break;
     case "hibernate":
       await runPowerShell("Add-Type -Assembly System.Windows.Forms; [System.Windows.Forms.Application]::SetSuspendState('Hibernate', $false, $true)");
+      break;
+    case "lock":
+      await runPowerShell("rundll32.exe user32.dll,LockWorkStation");
+      break;
+  }

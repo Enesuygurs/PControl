@@ -491,3 +491,15 @@ export default function ControlPanel() {
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           onClick={() => setShowQR(false)}
+                          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] md:hidden"
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                          className="fixed inset-x-4 top-24 md:absolute md:inset-auto md:top-20 md:right-0 p-6 rounded-[2.5rem] bg-zinc-950 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[100] md:w-64 space-y-4 backdrop-blur-2xl"
+                        >
+                          <div className="p-4 bg-white rounded-3xl flex justify-center shadow-inner">
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=http://${status.ip}:3000`}
+                              alt="QR Access"
