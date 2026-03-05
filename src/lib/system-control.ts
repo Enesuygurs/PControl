@@ -209,3 +209,8 @@ export async function executePowerAction(action: PowerAction): Promise<void> {
       await runPowerShell("rundll32.exe user32.dll,LockWorkStation");
       break;
   }
+}
+
+/**
+ * MEDIA CONTROLS
+ */

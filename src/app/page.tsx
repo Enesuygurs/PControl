@@ -503,3 +503,15 @@ export default function ControlPanel() {
                             <img
                               src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=http://${status.ip}:3000`}
                               alt="QR Access"
+                              className="w-40 h-40"
+                            />
+                          </div>
+                          <div className="text-center space-y-2">
+                            <p className="text-sm font-bold font-sora text-white">Mobile Terminal Access</p>
+                            <p className="text-[10px] font-medium text-zinc-500 leading-relaxed">Scan this QR while on the same Wi-Fi network to connect.</p>
+                          </div>
+                          <button
+                            onClick={() => setShowQR(false)}
+                            className="w-full py-3 rounded-2xl bg-zinc-800 text-[10px] font-bold text-zinc-400 md:hidden"
+                          >
+                            Close Menu
