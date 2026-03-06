@@ -214,3 +214,8 @@ export async function executePowerAction(action: PowerAction): Promise<void> {
 /**
  * MEDIA CONTROLS
  */
+export async function mediaControl(action: "playpause" | "next" | "prev"): Promise<void> {
+  const keys: Record<string, number> = {
+    playpause: 179,
+    next: 176,
+    prev: 177,

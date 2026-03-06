@@ -515,3 +515,15 @@ export default function ControlPanel() {
                             className="w-full py-3 rounded-2xl bg-zinc-800 text-[10px] font-bold text-zinc-400 md:hidden"
                           >
                             Close Menu
+                          </button>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <button
+                  onClick={() => fetchStatus(true)}
+                  disabled={refreshing}
+                  className={cn(
+                    "p-4 rounded-2xl bg-zinc-800/50 border border-white/5 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all shadow-lg",
