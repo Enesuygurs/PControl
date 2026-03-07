@@ -527,3 +527,15 @@ export default function ControlPanel() {
                   disabled={refreshing}
                   className={cn(
                     "p-4 rounded-2xl bg-zinc-800/50 border border-white/5 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all shadow-lg",
+                    refreshing && "opacity-50 cursor-not-allowed"
+                  )}
+                >
+                  <RotateCcw className={cn("w-6 h-6", refreshing && "animate-spin")} />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 md:gap-4 pr-2 md:pr-0">
+                <div className="h-8 w-px bg-white/5" />
+                <div className="text-right whitespace-nowrap">
+                  <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-none">Status</p>
+                  <p className="text-sm font-black text-primary leading-tight">ACTIVE NODE</p>

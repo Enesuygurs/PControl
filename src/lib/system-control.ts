@@ -219,3 +219,8 @@ export async function mediaControl(action: "playpause" | "next" | "prev"): Promi
     playpause: 179,
     next: 176,
     prev: 177,
+  };
+  await runPowerShell(`(new-object -com wscript.shell).SendKeys([char]${keys[action]})`);
+}
+
+/**
