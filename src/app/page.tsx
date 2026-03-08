@@ -539,3 +539,15 @@ export default function ControlPanel() {
                 <div className="text-right whitespace-nowrap">
                   <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest leading-none">Status</p>
                   <p className="text-sm font-black text-primary leading-tight">ACTIVE NODE</p>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Stats Grid */}
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+          >

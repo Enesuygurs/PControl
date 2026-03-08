@@ -224,3 +224,8 @@ export async function mediaControl(action: "playpause" | "next" | "prev"): Promi
 }
 
 /**
+ * SYSTEM INFO METRICS
+ */
+export async function getDiskUsage() {
+  const disks = await si.fsSize();
+  // Filter for common Windows fixed drives (C:, D:, etc.)
