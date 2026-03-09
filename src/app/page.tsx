@@ -551,3 +551,15 @@ export default function ControlPanel() {
             animate="show"
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
           >
+            <MetricCard icon={<Cpu />} label="CPU LOAD" value={`${status?.cpu || 0}%`} progress={status?.cpu || 0} color="primary" />
+            <MetricCard icon={<Activity />} label="MEMORY" value={`${status?.memory || 0}%`} progress={status?.memory || 0} color="purple" />
+            <MetricCard
+              icon={<Wifi />}
+              label="WIFI SIGNAL"
+              value={`${status?.wifi || 0}%`}
+              progress={status?.wifi || 0}
+              color="pink"
+            />
+            <MetricCard
+              icon={status?.battery?.isCharging ? <BatteryCharging className="text-emerald-400" /> : <Battery />}
+              label="BATTERY"

@@ -229,3 +229,8 @@ export async function mediaControl(action: "playpause" | "next" | "prev"): Promi
 export async function getDiskUsage() {
   const disks = await si.fsSize();
   // Filter for common Windows fixed drives (C:, D:, etc.)
+  return disks
+    .filter(d => d.mount.match(/^[A-Z]:$/i) || d.type.toLowerCase().includes("fixed") || d.type === "NTFS")
+    .map(d => ({
+      mount: d.mount,
+      total: Math.round(d.size / (1024 ** 3)),
