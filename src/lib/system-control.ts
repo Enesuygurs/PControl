@@ -234,3 +234,8 @@ export async function getDiskUsage() {
     .map(d => ({
       mount: d.mount,
       total: Math.round(d.size / (1024 ** 3)),
+      used: Math.round(d.used / (1024 ** 3)),
+      percentage: Math.round(d.use),
+    }));
+}
+

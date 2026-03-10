@@ -563,3 +563,15 @@ export default function ControlPanel() {
             <MetricCard
               icon={status?.battery?.isCharging ? <BatteryCharging className="text-emerald-400" /> : <Battery />}
               label="BATTERY"
+              value={status?.battery ? `${status.battery.percentage}%` : "N/A"}
+              progress={status?.battery?.percentage || 0}
+              color={status?.battery?.isCharging ? "emerald" : "orange"}
+            />
+          </motion.div>
+
+          {/* Storage Management Section */}
+          <section className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-8 backdrop-blur-md">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-500">
+                <Database className="w-5 h-5" />
+              </div>
