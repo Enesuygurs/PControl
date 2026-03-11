@@ -239,3 +239,8 @@ export async function getDiskUsage() {
     }));
 }
 
+export async function getTempInfo() {
+  try {
+    const temp = await si.cpuTemperature();
+    return temp.main || 0;
+  } catch (e) {

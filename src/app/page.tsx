@@ -575,3 +575,15 @@ export default function ControlPanel() {
               <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-500">
                 <Database className="w-5 h-5" />
               </div>
+              <div>
+                <h3 className="font-bold font-sora">Storage Management</h3>
+                <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest">Active System Drives</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {status?.disk.map((d, i) => (
+                <div key={i} className="p-6 rounded-[2rem] bg-zinc-950/40 border border-white/5 space-y-4">
+                  <div className="flex justify-between items-end">
+                    <div>
+                      <p className="text-[10px] font-black text-cyan-500 uppercase tracking-tighter mb-1">Drive {d.mount}</p>
