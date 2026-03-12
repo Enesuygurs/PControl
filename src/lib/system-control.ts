@@ -244,3 +244,8 @@ export async function getTempInfo() {
     const temp = await si.cpuTemperature();
     return temp.main || 0;
   } catch (e) {
+    return 0;
+  }
+}
+
+export async function getNetworkSpeed() {

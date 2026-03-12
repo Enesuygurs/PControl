@@ -587,3 +587,15 @@ export default function ControlPanel() {
                   <div className="flex justify-between items-end">
                     <div>
                       <p className="text-[10px] font-black text-cyan-500 uppercase tracking-tighter mb-1">Drive {d.mount}</p>
+                      <h4 className="text-xl font-bold font-sora text-white">{d.used} GB <span className="text-xs text-zinc-500">OF {d.total} GB</span></h4>
+                      <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mt-1">{d.total - d.used} GB FREE SPACE</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-2xl font-black font-sora text-cyan-400">{d.percentage}%</p>
+                    </div>
+                  </div>
+                  <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${d.percentage}%` }}
+                      transition={{ duration: 1, ease: "easeOut" }}
