@@ -249,3 +249,8 @@ export async function getTempInfo() {
 }
 
 export async function getNetworkSpeed() {
+  try {
+    const stats = await si.networkStats();
+    const active = stats.find(s => s.operstate === "up") || stats[0];
+    return {
+      rx: Math.round((active?.rx_sec || 0) / 1024), // KB/s

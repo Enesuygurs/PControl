@@ -599,3 +599,15 @@ export default function ControlPanel() {
                       initial={{ width: 0 }}
                       animate={{ width: `${d.percentage}%` }}
                       transition={{ duration: 1, ease: "easeOut" }}
+                      className="h-full bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Remote Input Section */}
+          <div className={cn("grid lg:grid-cols-[1fr_300px] gap-6 md:gap-8 transition-all duration-700 relative", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+            <div className="p-6 md:p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md relative overflow-hidden group">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
