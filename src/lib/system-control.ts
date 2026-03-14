@@ -254,3 +254,8 @@ export async function getNetworkSpeed() {
     const active = stats.find(s => s.operstate === "up") || stats[0];
     return {
       rx: Math.round((active?.rx_sec || 0) / 1024), // KB/s
+      tx: Math.round((active?.tx_sec || 0) / 1024), // KB/s
+    };
+  } catch (e) {
+    return { rx: 0, tx: 0 };
+  }

@@ -611,3 +611,15 @@ export default function ControlPanel() {
           <div className={cn("grid lg:grid-cols-[1fr_300px] gap-6 md:gap-8 transition-all duration-700 relative", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
             <div className="p-6 md:p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md relative overflow-hidden group">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                    <MousePointer2 className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-bold font-sora">Precision Touchpad</h3>
+                </div>
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <button onClick={() => handleMouseClick("left")} className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-zinc-800/50 border border-white/5 text-[10px] font-black uppercase hover:bg-primary/10 hover:text-primary transition-all">Left Click</button>
+                  <button onClick={() => handleMouseClick("right")} className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-zinc-800/50 border border-white/5 text-[10px] font-black uppercase hover:bg-primary/10 hover:text-primary transition-all">Right Click</button>
+                </div>
+              </div>
+
