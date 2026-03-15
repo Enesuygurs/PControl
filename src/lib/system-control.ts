@@ -259,3 +259,8 @@ export async function getNetworkSpeed() {
   } catch (e) {
     return { rx: 0, tx: 0 };
   }
+}
+
+export async function getWifiSignal(): Promise<number> {
+  try {
+    const res = await runPowerShell("(netsh wlan show interfaces) | Select-String 'Signal'");

@@ -623,3 +623,15 @@ export default function ControlPanel() {
                 </div>
               </div>
 
+              <div
+                className="h-64 rounded-[2.5rem] bg-zinc-950/40 border-2 border-dashed border-white/5 flex items-center justify-center relative active:border-primary/20 transition-colors cursor-crosshair touch-none select-none"
+                onTouchStart={(e) => {
+                  const t = e.touches[0];
+                  lastMousePos.current = { x: t.clientX, y: t.clientY };
+                  touchStartInfo.current = {
+                    time: Date.now(),
+                    x: t.clientX,
+                    y: t.clientY,
+                    maxFingers: e.touches.length,
+                    isMove: false
+                  };
