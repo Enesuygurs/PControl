@@ -635,3 +635,15 @@ export default function ControlPanel() {
                     maxFingers: e.touches.length,
                     isMove: false
                   };
+                }}
+                onTouchMove={(e) => {
+                  const t = e.touches[0];
+                  if (touchStartInfo.current) {
+                    const totalDx = Math.abs(t.clientX - touchStartInfo.current.x);
+                    const totalDy = Math.abs(t.clientY - touchStartInfo.current.y);
+                    if (totalDx > 10 || totalDy > 10) touchStartInfo.current.isMove = true;
+                    if (e.touches.length > touchStartInfo.current.maxFingers) {
+                      touchStartInfo.current.maxFingers = e.touches.length;
+                    }
+                  }
+

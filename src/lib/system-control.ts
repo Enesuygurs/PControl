@@ -264,3 +264,8 @@ export async function getNetworkSpeed() {
 export async function getWifiSignal(): Promise<number> {
   try {
     const res = await runPowerShell("(netsh wlan show interfaces) | Select-String 'Signal'");
+    const match = res.match(/(\d+)%/);
+    return match ? parseInt(match[1]) : 100; // 100 as fallback if wired
+  } catch (e) {
+    return 100;
+  }
