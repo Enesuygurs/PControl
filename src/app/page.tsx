@@ -647,3 +647,15 @@ export default function ControlPanel() {
                     }
                   }
 
+                  if (lastMousePos.current) {
+                    const dx = (t.clientX - lastMousePos.current.x) * 2.5;
+                    const dy = (t.clientY - lastMousePos.current.y) * 2.5;
+                    handleMouseMove(dx, dy);
+                  }
+                  lastMousePos.current = { x: t.clientX, y: t.clientY };
+                }}
+                onTouchEnd={(e) => {
+                  if (touchStartInfo.current && !touchStartInfo.current.isMove) {
+                    const duration = Date.now() - touchStartInfo.current.time;
+                    if (duration < 250) {
+                      if (touchStartInfo.current.maxFingers === 1) handleMouseClick("left");
