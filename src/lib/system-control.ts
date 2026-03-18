@@ -274,3 +274,8 @@ export async function getWifiSignal(): Promise<number> {
 export async function getMediaMetadata() {
   const script = `
     $manager = [Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager, Windows.Media.Control, ContentType = WindowsRuntime]::RequestAsync().GetResults()
+    $session = $manager.GetCurrentSession()
+    if ($session) {
+        $props = $session.TryGetMediaPropertiesAsync().GetResults()
+        @{ Title = $props.Title; Artist = $props.Artist } | ConvertTo-Json -Compress
+    } else {

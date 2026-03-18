@@ -659,3 +659,15 @@ export default function ControlPanel() {
                     const duration = Date.now() - touchStartInfo.current.time;
                     if (duration < 250) {
                       if (touchStartInfo.current.maxFingers === 1) handleMouseClick("left");
+                      else if (touchStartInfo.current.maxFingers === 2) handleMouseClick("right");
+                    }
+                  }
+                  lastMousePos.current = null;
+                  touchStartInfo.current = null;
+                }}
+              >
+                <div className="text-center opacity-20 group-active:opacity-40 transition-opacity">
+                  <MousePointer2 className="w-12 h-12 mx-auto mb-2" />
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em]">Direct Motion Control</p>
+                </div>
+              </div>
