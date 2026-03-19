@@ -671,3 +671,15 @@ export default function ControlPanel() {
                   <p className="text-[10px] font-black uppercase tracking-[0.3em]">Direct Motion Control</p>
                 </div>
               </div>
+            </div>
+
+            <div className="p-6 md:p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400">
+                  <KeyboardIcon className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold font-sora">Remote Typing</h3>
+              </div>
+
+              <form onSubmit={handleKeyboard} className="space-y-4">
+                <textarea

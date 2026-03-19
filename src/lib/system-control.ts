@@ -279,3 +279,8 @@ export async function getMediaMetadata() {
         $props = $session.TryGetMediaPropertiesAsync().GetResults()
         @{ Title = $props.Title; Artist = $props.Artist } | ConvertTo-Json -Compress
     } else {
+        @{ Title = ""; Artist = "" } | ConvertTo-Json -Compress
+    }
+  `;
+  try {
+    const res = await runPowerShell(script);
