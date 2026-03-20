@@ -683,3 +683,15 @@ export default function ControlPanel() {
 
               <form onSubmit={handleKeyboard} className="space-y-4">
                 <textarea
+                  value={kbInput}
+                  onChange={(e) => setKbInput(e.target.value)}
+                  placeholder="Type text to send..."
+                  className="w-full h-32 bg-zinc-950/50 border border-white/10 rounded-2xl p-4 text-xs font-medium focus:outline-none focus:border-indigo-500/50 transition-all resize-none custom-scrollbar"
+                />
+                <button
+                  type="submit"
+                  className="w-full py-4 rounded-2xl bg-indigo-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-[0_10px_30px_rgba(99,102,241,0.2)]"
+                >
+                  Send Keystrokes
+                </button>
+              </form>

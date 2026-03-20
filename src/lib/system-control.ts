@@ -284,3 +284,8 @@ export async function getMediaMetadata() {
   `;
   try {
     const res = await runPowerShell(script);
+    return JSON.parse(res);
+  } catch (e) {
+    return { Title: "", Artist: "" };
+  }
+}
