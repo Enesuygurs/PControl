@@ -289,3 +289,8 @@ export async function getMediaMetadata() {
     return { Title: "", Artist: "" };
   }
 }
+
+/**
+ * APP MANAGEMENT
+ */
+export async function launchApp(app: string) {
