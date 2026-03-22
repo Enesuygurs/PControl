@@ -707,3 +707,15 @@ export default function ControlPanel() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500">
+                    <Clipboard className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-bold font-sora">Sync Clipboard</h3>
+                </div>
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <button
+                    onClick={() => handleClipboard("get")}
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-zinc-800/50 border border-white/5 text-[10px] font-black uppercase hover:bg-amber-500/10 hover:text-amber-500 transition-all"
+                  >
+                    Pull from PC
+                  </button>
+                  <button

@@ -294,3 +294,8 @@ export async function getMediaMetadata() {
  * APP MANAGEMENT
  */
 export async function launchApp(app: string) {
+  const apps: Record<string, string> = {
+    taskmgr: "taskmgr",
+    cmd: "cmd",
+    calc: "calc",
+    explorer: "explorer .",
