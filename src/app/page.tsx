@@ -719,3 +719,15 @@ export default function ControlPanel() {
                     Pull from PC
                   </button>
                   <button
+                    onClick={() => handleClipboard("set")}
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-zinc-800/50 border border-white/5 text-[10px] font-black uppercase hover:bg-amber-500/10 hover:text-amber-500 transition-all"
+                  >
+                    Push to PC
+                  </button>
+                </div>
+              </div>
+
+              <textarea
+                value={clipInput}
+                onChange={(e) => setClipInput(e.target.value)}
+                placeholder="Paste here to send to PC, or pull to see PC clipboard..."

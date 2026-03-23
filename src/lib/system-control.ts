@@ -299,3 +299,8 @@ export async function launchApp(app: string) {
     cmd: "cmd",
     calc: "calc",
     explorer: "explorer .",
+    browser: "https://google.com",
+    snip: "ms-screenclip:",
+  };
+  const command = apps[app] || app;
+  await runPowerShell(`Start-Process ${command}`);
