@@ -731,3 +731,15 @@ export default function ControlPanel() {
                 value={clipInput}
                 onChange={(e) => setClipInput(e.target.value)}
                 placeholder="Paste here to send to PC, or pull to see PC clipboard..."
+                className="w-full h-24 bg-zinc-950/50 border border-white/10 rounded-2xl p-4 text-xs font-medium focus:outline-none focus:border-amber-500/50 transition-all resize-none custom-scrollbar"
+              />
+            </div>
+
+            {/* Screen Capture Hub */}
+            <div className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md flex flex-col items-center justify-center text-center group">
+              <div className="p-4 rounded-3xl bg-zinc-950/50 border border-white/5 mb-2 group-hover:border-primary/20 transition-all">
+                <ImageIcon className="w-8 h-8 text-primary opacity-50 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <div>
+                <h3 className="font-bold font-sora text-sm mb-1">Visual Monitoring</h3>
+                <p className="text-[10px] text-zinc-500 font-medium px-4">Instant high-def screenshot of your primary display.</p>

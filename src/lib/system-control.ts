@@ -304,3 +304,8 @@ export async function launchApp(app: string) {
   };
   const command = apps[app] || app;
   await runPowerShell(`Start-Process ${command}`);
+}
+
+export async function killProcess(name: string) {
+  await runPowerShell(`Get-Process ${name} -ErrorAction SilentlyContinue | Stop-Process -Force`);
+}
