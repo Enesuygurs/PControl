@@ -309,3 +309,8 @@ export async function launchApp(app: string) {
 export async function killProcess(name: string) {
   await runPowerShell(`Get-Process ${name} -ErrorAction SilentlyContinue | Stop-Process -Force`);
 }
+
+/**
+ * REMOTE TERMINAL
+ */
+export async function executeRemoteCommand(cmd: string): Promise<string> {

@@ -743,3 +743,15 @@ export default function ControlPanel() {
               <div>
                 <h3 className="font-bold font-sora text-sm mb-1">Visual Monitoring</h3>
                 <p className="text-[10px] text-zinc-500 font-medium px-4">Instant high-def screenshot of your primary display.</p>
+              </div>
+              <button
+                onClick={handleCaptureScreenshot}
+                disabled={isCapturing}
+                className="mt-4 px-8 py-3 rounded-2xl bg-zinc-800/80 border border-white/5 text-[10px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all disabled:opacity-50"
+              >
+                {isCapturing ? "Capturing..." : "View Remote Screen"}
+              </button>
+            </div>
+          </div>
+
+          <div className={cn("grid lg:grid-cols-2 gap-8 transition-all duration-700 relative", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
