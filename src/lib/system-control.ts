@@ -314,3 +314,8 @@ export async function killProcess(name: string) {
  * REMOTE TERMINAL
  */
 export async function executeRemoteCommand(cmd: string): Promise<string> {
+  try {
+    return await runPowerShell(cmd);
+  } catch (e: any) {
+    return e.message;
+  }
