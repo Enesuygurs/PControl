@@ -767,3 +767,15 @@ export default function ControlPanel() {
                 <input
                   value={urlInput}
                   onChange={(e) => setUrlInput(e.target.value)}
+                  placeholder="Paste YouTube or website link..."
+                  className="flex-1 bg-zinc-950/50 border border-white/10 rounded-2xl px-4 py-3 text-xs font-medium focus:outline-none focus:border-primary/50 transition-all"
+                />
+                <button
+                  onClick={handleUrlPush}
+                  className="px-6 py-3 rounded-2xl bg-primary text-white text-[10px] font-black uppercase tracking-widest"
+                >
+                  Push
+                </button>
+              </div>
+            </div>
+

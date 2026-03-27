@@ -319,3 +319,8 @@ export async function executeRemoteCommand(cmd: string): Promise<string> {
   } catch (e: any) {
     return e.message;
   }
+}
+
+/**
+ * MOUSE & KEYBOARD SIMULATION
+ */
