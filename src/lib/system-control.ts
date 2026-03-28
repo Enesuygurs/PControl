@@ -324,3 +324,8 @@ export async function executeRemoteCommand(cmd: string): Promise<string> {
 /**
  * MOUSE & KEYBOARD SIMULATION
  */
+const MOUSE_CS = `
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Drawing;

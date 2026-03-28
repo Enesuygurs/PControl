@@ -779,3 +779,15 @@ export default function ControlPanel() {
               </div>
             </div>
 
+            {/* Shutdown Timer */}
+            <div className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-red-500/10 text-red-500">
+                  <Timer className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold font-sora">Auto-Shutdown Timer</h3>
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                {[30, 60, 120].map(m => (
+                  <button
+                    key={m}
