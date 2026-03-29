@@ -791,3 +791,15 @@ export default function ControlPanel() {
                 {[30, 60, 120].map(m => (
                   <button
                     key={m}
+                    onClick={() => handleShutdownTimer(m)}
+                    className="flex flex-col items-center justify-center p-3 rounded-2xl bg-zinc-800/50 border border-white/5 hover:border-red-500/20 hover:bg-red-500/5 transition-all group"
+                  >
+                    <span className="text-xs font-bold font-sora">{m}</span>
+                    <span className="text-[8px] text-zinc-500 font-black uppercase group-hover:text-red-400">MINS</span>
+                  </button>
+                ))}
+                <button
+                  onClick={() => handleShutdownTimer("cancel")}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-zinc-950/50 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all"
+                >
+                  <CircleOff className="w-4 h-4 mb-1" />

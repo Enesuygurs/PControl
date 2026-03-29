@@ -329,3 +329,8 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Drawing;
+
+namespace InputSimulator {
+    public class MouseControl {
+        [DllImport("user32.dll")]
+        static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
