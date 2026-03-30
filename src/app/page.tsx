@@ -803,3 +803,15 @@ export default function ControlPanel() {
                   className="flex flex-col items-center justify-center p-3 rounded-2xl bg-zinc-950/50 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all"
                 >
                   <CircleOff className="w-4 h-4 mb-1" />
+                  <span className="text-[8px] font-black uppercase">CANCEL</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className={cn("grid lg:grid-cols-2 gap-8 transition-all duration-700 relative", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+            {/* Sticky Note Hub */}
+            <div className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-yellow-500/10 text-yellow-500">

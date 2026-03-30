@@ -334,3 +334,8 @@ namespace InputSimulator {
     public class MouseControl {
         [DllImport("user32.dll")]
         static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
+        private const uint LDOWN = 0x02; private const uint LUP = 0x04;
+        private const uint RDOWN = 0x08; private const uint RUP = 0x10;
+
+        public static void Move(int dx, int dy) {
+            var c = Cursor.Position;
