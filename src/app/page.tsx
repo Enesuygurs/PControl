@@ -815,3 +815,15 @@ export default function ControlPanel() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-yellow-500/10 text-yellow-500">
+                    <NoteIcon className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-bold font-sora">PC Sticky Note</h3>
+                </div>
+                <button
+                  onClick={handleStickyNote}
+                  className="px-4 py-2 rounded-xl bg-zinc-800/50 border border-white/5 text-[10px] font-black uppercase hover:bg-yellow-500/10 hover:text-yellow-500 transition-all"
+                >
+                  Send Note
+                </button>
+              </div>
+              <textarea

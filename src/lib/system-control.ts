@@ -339,3 +339,8 @@ namespace InputSimulator {
 
         public static void Move(int dx, int dy) {
             var c = Cursor.Position;
+            Cursor.Position = new Point(c.X + dx, c.Y + dy);
+        }
+        public static void Click(string b) {
+            if (b == "left") mouse_event(LDOWN | LUP, 0, 0, 0, 0);
+            else if (b == "right") mouse_event(RDOWN | RUP, 0, 0, 0, 0);
