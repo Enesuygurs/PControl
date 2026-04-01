@@ -344,3 +344,8 @@ namespace InputSimulator {
         public static void Click(string b) {
             if (b == "left") mouse_event(LDOWN | LUP, 0, 0, 0, 0);
             else if (b == "right") mouse_event(RDOWN | RUP, 0, 0, 0, 0);
+        }
+    }
+}
+`;
+

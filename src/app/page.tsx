@@ -827,3 +827,15 @@ export default function ControlPanel() {
                 </button>
               </div>
               <textarea
+                value={stickyInput}
+                onChange={(e) => setStickyInput(e.target.value)}
+                placeholder="Type a message to show on PC screen..."
+                className="w-full h-24 bg-zinc-950/50 border border-white/10 rounded-2xl p-4 text-xs font-medium focus:outline-none focus:border-yellow-500/50 transition-all resize-none custom-scrollbar"
+              />
+            </div>
+
+            {/* Voice AI Hub */}
+            <div className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                  <Mic className="w-5 h-5" />
