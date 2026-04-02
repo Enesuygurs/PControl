@@ -349,3 +349,8 @@ namespace InputSimulator {
 }
 `;
 
+export async function simulateMouse(dx: number, dy: number, click?: string): Promise<void> {
+  if (click) {
+    const script = `
+      if (-not ([System.Management.Automation.PSTypeName]'Win32.Win32Mouse').Type) {
+        $sig = '[DllImport("user32.dll")] public static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);';

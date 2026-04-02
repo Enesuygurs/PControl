@@ -839,3 +839,15 @@ export default function ControlPanel() {
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-primary/10 text-primary">
                   <Mic className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold font-sora">Voice Interaction</h3>
+              </div>
+
+              <button
+                onClick={handleVoiceCommand}
+                className={cn(
+                  "w-full flex items-center justify-center gap-3 p-10 rounded-3xl border transition-all group",
+                  isListening ? "bg-primary border-primary animate-pulse" : "bg-zinc-950/50 border-white/5 hover:border-primary/30"
+                )}
+              >
+                <Mic className={cn("w-10 h-10", isListening ? "text-white" : "text-primary")} />
