@@ -851,3 +851,15 @@ export default function ControlPanel() {
                 )}
               >
                 <Mic className={cn("w-10 h-10", isListening ? "text-white" : "text-primary")} />
+                <div className="text-left">
+                  <p className="text-[11px] font-black uppercase tracking-widest text-white">Voice Command Center</p>
+                  <p className="text-[9px] text-zinc-500 font-medium">{isListening ? "Listening your command..." : "Tap to Speak (Turkish)"}</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <AnimatePresence>
+            {screenshot && (
+              <motion.div
+                initial={{ opacity: 0 }}

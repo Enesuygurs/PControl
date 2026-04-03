@@ -354,3 +354,8 @@ export async function simulateMouse(dx: number, dy: number, click?: string): Pro
     const script = `
       if (-not ([System.Management.Automation.PSTypeName]'Win32.Win32Mouse').Type) {
         $sig = '[DllImport("user32.dll")] public static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);';
+        Add-Type -MemberDefinition $sig -Name "Win32Mouse" -Namespace "Win32" -ErrorAction SilentlyContinue;
+      }
+      if ("${click}" -eq "left") { [Win32.Win32Mouse]::mouse_event(0x0002, 0, 0, 0, 0); [Win32.Win32Mouse]::mouse_event(0x0004, 0, 0, 0, 0); }
+      elseif ("${click}" -eq "right") { [Win32.Win32Mouse]::mouse_event(0x0008, 0, 0, 0, 0); [Win32.Win32Mouse]::mouse_event(0x0010, 0, 0, 0, 0); }
+    `;
