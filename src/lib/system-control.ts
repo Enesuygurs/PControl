@@ -359,3 +359,8 @@ export async function simulateMouse(dx: number, dy: number, click?: string): Pro
       if ("${click}" -eq "left") { [Win32.Win32Mouse]::mouse_event(0x0002, 0, 0, 0, 0); [Win32.Win32Mouse]::mouse_event(0x0004, 0, 0, 0, 0); }
       elseif ("${click}" -eq "right") { [Win32.Win32Mouse]::mouse_event(0x0008, 0, 0, 0, 0); [Win32.Win32Mouse]::mouse_event(0x0010, 0, 0, 0, 0); }
     `;
+    psBridge.send(script);
+  } else {
+    // Ultra Fluid: Use 0x01 (MOUSEEVENTF_MOVE) for native relative motion
+    const moveX = Math.round(dx);
+    const moveY = Math.round(dy);

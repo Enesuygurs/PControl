@@ -863,3 +863,15 @@ export default function ControlPanel() {
             {screenshot && (
               <motion.div
                 initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] flex flex-col p-4 md:p-12"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
+                  <div className="flex items-center gap-4">
+                    <Monitor className="w-6 h-6 text-primary" />
+                    <div>
+                      <h2 className="text-xl font-bold font-sora leading-tight">Remote View</h2>
+                      <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Live Capture Node</p>
+                    </div>
+                  </div>
