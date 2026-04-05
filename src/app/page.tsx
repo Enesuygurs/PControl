@@ -875,3 +875,15 @@ export default function ControlPanel() {
                       <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Live Capture Node</p>
                     </div>
                   </div>
+                  <button
+                    onClick={() => setScreenshot(null)}
+                    className="p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-all self-end sm:self-auto"
+                  >
+                    <XCircle className="w-6 h-6" />
+                  </button>
+                </div>
+                <div className="flex-1 relative rounded-3xl overflow-hidden border border-white/10 bg-zinc-900 flex items-center justify-center">
+                  <img
+                    src={`data:image/jpeg;base64,${screenshot}`}
+                    alt="Remote Screen"
+                    className="max-w-full max-h-full object-contain shadow-2xl"

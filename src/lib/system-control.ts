@@ -364,3 +364,8 @@ export async function simulateMouse(dx: number, dy: number, click?: string): Pro
     // Ultra Fluid: Use 0x01 (MOUSEEVENTF_MOVE) for native relative motion
     const moveX = Math.round(dx);
     const moveY = Math.round(dy);
+    const script = `
+      if (-not ([System.Management.Automation.PSTypeName]'Win32.Win32Mouse').Type) {
+        $sig = '[DllImport("user32.dll")] public static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);';
+        Add-Type -MemberDefinition $sig -Name "Win32Mouse" -Namespace "Win32" -ErrorAction SilentlyContinue;
+      }
