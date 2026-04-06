@@ -369,3 +369,8 @@ export async function simulateMouse(dx: number, dy: number, click?: string): Pro
         $sig = '[DllImport("user32.dll")] public static extern void mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);';
         Add-Type -MemberDefinition $sig -Name "Win32Mouse" -Namespace "Win32" -ErrorAction SilentlyContinue;
       }
+      [Win32.Win32Mouse]::mouse_event(0x0001, ${moveX}, ${moveY}, 0, 0);
+    `;
+    psBridge.send(script);
+  }
+}

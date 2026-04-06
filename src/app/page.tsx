@@ -887,3 +887,15 @@ export default function ControlPanel() {
                     src={`data:image/jpeg;base64,${screenshot}`}
                     alt="Remote Screen"
                     className="max-w-full max-h-full object-contain shadow-2xl"
+                  />
+                </div>
+                <div className="mt-8 flex justify-center">
+                  <button
+                    onClick={handleCaptureScreenshot}
+                    className="px-8 py-4 rounded-2xl bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-[0_10px_30px_rgba(245,158,11,0.3)]"
+                  >
+                    Refresh Capture
+                  </button>
+                </div>
+              </motion.div>
+            )}
