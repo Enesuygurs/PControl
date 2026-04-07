@@ -899,3 +899,15 @@ export default function ControlPanel() {
                 </div>
               </motion.div>
             )}
+          </AnimatePresence>
+
+          {/* Main Controls */}
+          <div className={cn("grid lg:grid-cols-2 gap-8 transition-all duration-700 relative", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+            <section className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-8 backdrop-blur-md flex flex-col">
+              <div className="flex items-center justify-between min-h-[72px]">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-2xl bg-primary/10 text-primary">
+                    <Volume2 className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold font-sora">System Volume</h3>
