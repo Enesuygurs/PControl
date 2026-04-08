@@ -911,3 +911,15 @@ export default function ControlPanel() {
                   </div>
                   <div>
                     <h3 className="font-bold font-sora">System Volume</h3>
+                    <p className="text-xs text-zinc-500 font-medium">Output intensity</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => sendControl("mute", !status?.isMuted)}
+                  className={cn(
+                    "p-4 rounded-2xl transition-all border",
+                    status?.isMuted
+                      ? "bg-red-500/10 border-red-500/20 text-red-500 shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                      : "bg-zinc-800/50 border-white/5 text-zinc-400 hover:text-white"
+                  )}
+                >

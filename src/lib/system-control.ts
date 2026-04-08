@@ -379,3 +379,8 @@ export async function simulateKeyboard(text: string): Promise<void> {
   const escaped = text.replace(/([{}()+^%~])/g, "{$1}").replace(/\n/g, "{ENTER}");
   const b64 = Buffer.from(escaped, "utf-8").toString("base64");
   psBridge.send(`[System.Windows.Forms.SendKeys]::SendWait([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64}')));`);
+}
+
+/**
+ * REMOTE TOOLS: SCREENSHOT, BATTERY, CLIPBOARD
+ */
