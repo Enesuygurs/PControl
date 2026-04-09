@@ -923,3 +923,15 @@ export default function ControlPanel() {
                       : "bg-zinc-800/50 border-white/5 text-zinc-400 hover:text-white"
                   )}
                 >
+                  {status?.isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6" />}
+                </button>
+              </div>
+
+              <div className="flex-1 space-y-8">
+                <ControlSlider
+                  value={status?.volume || 0}
+                  onChange={(v: number) => sendControl("volume", v, false)}
+                  color="primary"
+                  label={`${status?.volume}%`}
+                />
+

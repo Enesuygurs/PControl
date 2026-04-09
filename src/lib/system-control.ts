@@ -384,3 +384,8 @@ export async function simulateKeyboard(text: string): Promise<void> {
 /**
  * REMOTE TOOLS: SCREENSHOT, BATTERY, CLIPBOARD
  */
+export async function getScreenshot(): Promise<string> {
+  const script = `
+    Add-Type -AssemblyName System.Windows.Forms, System.Drawing;
+    $b = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds;
+    $bmp = New-Object System.Drawing.Bitmap($b.Width, $b.Height);
