@@ -935,3 +935,15 @@ export default function ControlPanel() {
                   label={`${status?.volume}%`}
                 />
 
+                <div className="grid grid-cols-4 gap-3">
+                  {[0, 25, 50, 100].map(v => (
+                    <QuickValue key={v} value={v} onClick={() => sendControl("volume", v)} active={status?.volume === v} />
+                  ))}
+                </div>
+
+                {/* Audio Output Router */}
+                {status?.audioDevices && status.audioDevices.length > 0 && (
+                  <div className="pt-6 border-t border-white/5 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <Music className="w-4 h-4 text-zinc-500" />
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Audio Routing</h4>

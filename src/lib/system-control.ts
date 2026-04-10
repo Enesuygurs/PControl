@@ -389,3 +389,8 @@ export async function getScreenshot(): Promise<string> {
     Add-Type -AssemblyName System.Windows.Forms, System.Drawing;
     $b = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds;
     $bmp = New-Object System.Drawing.Bitmap($b.Width, $b.Height);
+    $g = [System.Drawing.Graphics]::FromImage($bmp);
+    $g.CopyFromScreen($b.X, $b.Y, 0, 0, $b.Size);
+    $ms = New-Object System.IO.MemoryStream;
+    $bmp.Save($ms, [System.Drawing.Imaging.ImageFormat]::Jpeg);
+    [Convert]::ToBase64String($ms.ToArray())
