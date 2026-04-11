@@ -947,3 +947,15 @@ export default function ControlPanel() {
                     <div className="flex items-center gap-2">
                       <Music className="w-4 h-4 text-zinc-500" />
                       <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Audio Routing</h4>
+                    </div>
+                    <div className="grid grid-cols-1 gap-2">
+                      {status.audioDevices.map((device) => (
+                        <button
+                          key={device.Index}
+                          onClick={() => {
+                            executeControl("set-audio-device", device.Index);
+                            setTimeout(() => fetchStatus(true), 1500); // Wait for windows to apply and refresh
+                          }}
+                          className={cn(
+                            "flex items-center justify-between p-4 rounded-2xl border transition-all text-left",
+                            device.Default

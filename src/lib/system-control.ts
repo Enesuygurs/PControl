@@ -394,3 +394,5 @@ export async function getScreenshot(): Promise<string> {
     $ms = New-Object System.IO.MemoryStream;
     $bmp.Save($ms, [System.Drawing.Imaging.ImageFormat]::Jpeg);
     [Convert]::ToBase64String($ms.ToArray())
+  `;
+  return await runPowerShell(script);
