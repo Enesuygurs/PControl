@@ -959,3 +959,15 @@ export default function ControlPanel() {
                           className={cn(
                             "flex items-center justify-between p-4 rounded-2xl border transition-all text-left",
                             device.Default
+                              ? "bg-primary/10 border-primary/30 shadow-[0_0_15px_rgba(245,158,11,0.1)]"
+                              : "bg-zinc-800/30 border-white/5 hover:bg-zinc-800/50 hover:border-white/10"
+                          )}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={cn("w-2 h-2 rounded-full", device.Default ? "bg-primary shadow-[0_0_10px_rgba(245,158,11,1)]" : "bg-zinc-600")} />
+                            <span className={cn("text-xs font-bold font-sora", device.Default ? "text-primary" : "text-zinc-400")}>
+                              {device.Name}
+                            </span>
+                          </div>
+                          {device.Default && <span className="text-[8px] font-black uppercase tracking-widest text-primary/70">Active</span>}
+                        </button>
