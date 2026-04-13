@@ -971,3 +971,15 @@ export default function ControlPanel() {
                           </div>
                           {device.Default && <span className="text-[8px] font-black uppercase tracking-widest text-primary/70">Active</span>}
                         </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+
+            <section className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-8 backdrop-blur-md flex flex-col">
+              <div className="flex items-center justify-between min-h-[72px]">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-500">
+                    <Sun className="w-6 h-6" />
