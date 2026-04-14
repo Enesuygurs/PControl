@@ -983,3 +983,15 @@ export default function ControlPanel() {
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-500">
                     <Sun className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold font-sora">Screen Brightness</h3>
+                    <p className="text-xs text-zinc-500 font-medium">Panel backlight</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => sendControl("brightness", status?.brightness === 100 ? 0 : 100)}
+                  className={cn(
+                    "p-4 rounded-2xl transition-all border bg-zinc-800/50 border-white/5 text-zinc-400 hover:text-amber-500 hover:border-amber-500/20 hover:bg-amber-500/10"
+                  )}
+                >
