@@ -995,3 +995,15 @@ export default function ControlPanel() {
                     "p-4 rounded-2xl transition-all border bg-zinc-800/50 border-white/5 text-zinc-400 hover:text-amber-500 hover:border-amber-500/20 hover:bg-amber-500/10"
                   )}
                 >
+                  <Sun className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="flex-1 space-y-8">
+                <ControlSlider
+                  value={status?.brightness || 0}
+                  onChange={(v: number) => sendControl("brightness", v, false)}
+                  color="amber"
+                  label={`${status?.brightness}%`}
+                />
+
