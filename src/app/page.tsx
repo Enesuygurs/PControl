@@ -1007,3 +1007,15 @@ export default function ControlPanel() {
                   label={`${status?.brightness}%`}
                 />
 
+                <div className="grid grid-cols-4 gap-3">
+                  {[0, 50, 75, 100].map(v => (
+                    <QuickValue key={v} value={v} onClick={() => sendControl("brightness", v)} active={status?.brightness === v} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* Quick Hub */}
+          <div className="grid lg:grid-cols-3 gap-6">
+            <div className={cn("h-full transition-all duration-700", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
