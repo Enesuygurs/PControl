@@ -1019,3 +1019,15 @@ export default function ControlPanel() {
           {/* Quick Hub */}
           <div className="grid lg:grid-cols-3 gap-6">
             <div className={cn("h-full transition-all duration-700", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+              <ControlSection title="Launch" icon={<ExternalLink className="w-4 h-4" />}>
+                <div className="grid grid-cols-2 gap-3">
+                  <AppHubButton icon={<Terminal />} label="CMD" onClick={() => sendControl("launch", "cmd")} />
+                  <AppHubButton icon={<Activity />} label="Task" onClick={() => sendControl("launch", "taskmgr")} />
+                  <AppHubButton icon={<Search />} label="Web" onClick={() => sendControl("launch", "browser")} />
+                  <AppHubButton icon={<FolderOpen />} label="Files" onClick={() => setShowFileExplorer(true)} />
+                </div>
+              </ControlSection>
+            </div>
+
+            <div className={cn("h-full transition-all duration-700", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+              <ControlSection title="Media Center" icon={<Play className="w-4 h-4" />}>
