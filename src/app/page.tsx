@@ -1031,3 +1031,15 @@ export default function ControlPanel() {
 
             <div className={cn("h-full transition-all duration-700", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
               <ControlSection title="Media Center" icon={<Play className="w-4 h-4" />}>
+                <div className="flex flex-col justify-between h-full py-2">
+                  <div className="bg-zinc-800/30 p-4 rounded-2xl border border-white/5 mb-4 text-center">
+                    <p className="text-sm font-bold font-sora text-white truncate">{status?.media?.Title || "No Media Native"}</p>
+                    <p className="text-[10px] font-medium text-zinc-500 truncate">{status?.media?.Artist || "System idle"}</p>
+                  </div>
+                  <div className="flex items-center justify-between px-4">
+                    <MediaCtrl icon={<SkipBack />} onClick={() => sendControl("media", "prev")} />
+                    <MediaCtrl icon={<Play className="fill-current w-6 h-6" />} highlight onClick={() => sendControl("media", "playpause")} />
+                    <MediaCtrl icon={<SkipForward />} onClick={() => sendControl("media", "next")} />
+                  </div>
+                </div>
+              </ControlSection>
