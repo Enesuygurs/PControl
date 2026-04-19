@@ -1043,3 +1043,15 @@ export default function ControlPanel() {
                   </div>
                 </div>
               </ControlSection>
+            </div>
+
+            <div className={cn("h-full transition-all duration-700", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+              <ControlSection title="Terminal" icon={<Terminal className="w-4 h-4" />}>
+                <div className="flex flex-col h-full space-y-3">
+                  <form onSubmit={handleTerminal} className="relative group">
+                    <input
+                      type="text"
+                      value={cmdInput}
+                      onChange={(e) => setCmdInput(e.target.value)}
+                      placeholder="Run remote command..."
+                      className="w-full bg-zinc-950/50 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-medium focus:outline-none focus:border-primary/50 transition-all pr-12"
