@@ -1055,3 +1055,15 @@ export default function ControlPanel() {
                       onChange={(e) => setCmdInput(e.target.value)}
                       placeholder="Run remote command..."
                       className="w-full bg-zinc-950/50 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-medium focus:outline-none focus:border-primary/50 transition-all pr-12"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isExecuting}
+                      className="absolute right-2 top-1.5 p-1.5 text-zinc-500 hover:text-primary transition-colors disabled:opacity-50"
+                    >
+                      <Play className="w-3.5 h-3.5 fill-current" />
+                    </button>
+                  </form>
+                  <div className="flex-1 bg-zinc-950/80 rounded-xl p-3 font-mono text-[9px] overflow-hidden group">
+                    <div className="h-24 overflow-y-auto space-y-2 no-scrollbar">
+                      {cmdLog.length === 0 ? (
