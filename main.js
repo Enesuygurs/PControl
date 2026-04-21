@@ -16,42 +16,8 @@ if (!app.requestSingleInstanceLock()) {
   app.quit();
 }
 
-// Load environment variables from .env file manually
-function loadEnv() {
-  const envPaths = [
-    path.join(__dirname, '.env'), // Inside app resources
-    path.join(path.dirname(app.getPath('exe')), '.env'), // Next to executable
-  ];
-
-  envPaths.forEach(envPath => {
-    if (fs.existsSync(envPath)) {
-      console.log(`Loading environment from: ${envPath}`);
-      try {
-        const content = fs.readFileSync(envPath, 'utf8');
-        content.split(/\r?\n/).forEach(line => {
-          const trimmedLine = line.trim();
-          if (!trimmedLine || trimmedLine.startsWith('#')) return;
-          
-          const [key, ...valueParts] = trimmedLine.split('=');
-          if (key && valueParts.length > 0) {
-            const value = valueParts.join('=').trim();
-            // Don't override if already set in process.env (e.g. by system)
-            if (!process.env[key.trim()]) {
-              process.env[key.trim()] = value;
-            } else if (envPath.includes(path.dirname(app.getPath('exe')))) {
-              // But allow .env next to EXE to override internal defaults
-              process.env[key.trim()] = value;
-            }
-          }
-        });
-      } catch (e) {
-        console.error(`Failed to read .env from ${envPath}`, e);
-      }
-    }
-  });
-}
-
-loadEnv();
+// Pass Electron's user data path to Next.js server for configuration storage
+process.env.USER_DATA_PATH = app.getPath('userData');
 
 async function startNextServer() {
   const nextApp = next({ dev, hostname, port, dir: __dirname });

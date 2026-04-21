@@ -52,8 +52,7 @@
       "public/**/*",
       "main.js",
       "package.json",
-      "src/lib/system-control.ts",
-      ".env"
+      "src/lib/system-control.ts"
     ],
     "asar": false
   }

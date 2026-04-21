@@ -21,6 +21,7 @@ import {
   Thermometer,
   Lock,
   Unlock,
+  ShieldCheck,
   ExternalLink,
   Terminal,
   Eraser,
@@ -119,6 +120,7 @@ export default function ControlPanel() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [showPinPad, setShowPinPad] = useState(false);
+  const [isSetupMode, setIsSetupMode] = useState(false);
 
   const lastMousePos = useRef<{ x: number, y: number } | null>(null);
   const mouseThrottle = useRef<any>(null);
@@ -149,6 +151,21 @@ export default function ControlPanel() {
     if (typeof window !== "undefined" && localStorage.getItem("pcontrol_unlocked") === "true") {
       setIsUnlocked(true);
     }
+
+    // Check if PIN is configured
+    async function checkAuthStatus() {
+      try {
+        const res = await fetch("/api/auth/check");
+        const data = await res.json();
+        if (!data.configured) {
+          setIsSetupMode(true);
+          setShowPinPad(true);
+        }
+      } catch (err) {
+        console.error("Auth check failed", err);
+      }
+    }
+    checkAuthStatus();
   }, [fetchStatus]);
 
   const sendControl = async (action: string, value?: any, debounce = false) => {
@@ -1139,24 +1156,34 @@ export default function ControlPanel() {
       {!isUnlocked && showPinPad && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 pointer-events-none">
           <div className="relative p-8 rounded-[3rem] bg-zinc-950/90 border border-red-500/30 backdrop-blur-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-col items-center pointer-events-auto w-full max-w-sm">
-            <button onClick={() => setShowPinPad(false)} className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/10 text-zinc-500 hover:text-white transition-colors">
-              <XCircle className="w-5 h-5" />
-            </button>
-            <div className="p-4 rounded-3xl bg-red-500/10 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">
-              <Lock className="w-8 h-8 text-red-500" />
+            {!isSetupMode && (
+              <button onClick={() => setShowPinPad(false)} className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/10 text-zinc-500 hover:text-white transition-colors">
+                <XCircle className="w-5 h-5" />
+              </button>
+            )}
+            <div className={cn("p-4 rounded-3xl mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]", isSetupMode ? "bg-primary/10" : "bg-red-500/10")}>
+              {isSetupMode ? <ShieldCheck className="w-8 h-8 text-primary" /> : <Lock className="w-8 h-8 text-red-500" />}
             </div>
-            <h2 className="text-xl font-bold font-sora text-white mb-2">CLASSIFIED CLEARANCE</h2>
-            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest text-center mb-8">Enter PIN to access advanced system controls</p>
+            <h2 className="text-xl font-bold font-sora text-white mb-2">{isSetupMode ? "INITIAL SECURITY SETUP" : "CLASSIFIED CLEARANCE"}</h2>
+            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest text-center mb-8">
+              {isSetupMode ? "Create a 4-digit PIN to secure your dashboard" : "Enter PIN to access advanced system controls"}
+            </p>
             <form onSubmit={async (e) => { 
               e.preventDefault(); 
               try {
                 const res = await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin: pinInput }) });
                 const data = await res.json();
                 if (res.ok) { 
-                  setIsUnlocked(true); 
-                  setShowPinPad(false); 
-                  if (typeof window !== "undefined") localStorage.setItem("pcontrol_unlocked", "true"); 
-                  toast.success('Security Clearance Granted'); 
+                  if (isSetupMode) {
+                    setIsSetupMode(false);
+                    toast.success('Security PIN Created Successfully');
+                  } else {
+                    setIsUnlocked(true); 
+                    setShowPinPad(false); 
+                    if (typeof window !== "undefined") localStorage.setItem("pcontrol_unlocked", "true"); 
+                    toast.success('Security Clearance Granted'); 
+                  }
+                  setPinInput('');
                 } else { 
                   setPinInput(''); 
                   if (res.status === 401) {
@@ -1185,8 +1212,8 @@ export default function ControlPanel() {
                   ))}
                 </div>
               </div>
-              <button type="submit" className="mt-4 w-full py-4 rounded-2xl bg-red-500 hover:bg-red-600 transition-colors text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-red-500/20">
-                Authenticate
+              <button type="submit" className={cn("mt-4 w-full py-4 rounded-2xl transition-colors text-white text-[10px] font-black uppercase tracking-widest shadow-lg", isSetupMode ? "bg-primary hover:bg-primary/80 shadow-primary/20" : "bg-red-500 hover:bg-red-600 shadow-red-500/20")}>
+                {isSetupMode ? "Initialize Dashboard" : "Authenticate"}
               </button>
             </form>
           </div>
