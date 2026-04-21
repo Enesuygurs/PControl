@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-    <body className={cn(inter.variable, sora.variable, "antialiased bg-zinc-950")}>
+    <body className={cn(inter.variable, sora.variable, "antialiased bg-zinc-950")} suppressHydrationWarning>
       <main className="min-h-screen">
         {children}
       </main>
