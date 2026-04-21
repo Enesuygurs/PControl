@@ -2,12 +2,15 @@
   "name": "pcontrol",
   "version": "1.0.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0 --port 3000",
     "dev:local": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "electron:start": "electron .",
+    "build:app": "next build && electron-builder --win"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -26,9 +29,31 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
+    "electron": "^41.2.2",
+    "electron-builder": "^26.8.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "build": {
+    "appId": "com.enesuygurs.pcontrol",
+    "productName": "PControl",
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon.png"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      ".next/**/*",
+      "public/**/*",
+      "main.js",
+      "package.json",
+      "src/lib/system-control.ts"
+    ],
+    "asar": false
   }
 }
