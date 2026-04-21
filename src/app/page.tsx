@@ -168,6 +168,65 @@ export default function ControlPanel() {
     checkAuthStatus();
   }, [fetchStatus]);
 
+  // PIN submit handler
+  const submitPin = useCallback(async (pin: string) => {
+    try {
+      const res = await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin }) });
+      const data = await res.json();
+      if (res.ok) {
+        if (isSetupMode) {
+          setIsSetupMode(false);
+          toast.success('Security PIN Created Successfully');
+        } else {
+          setIsUnlocked(true);
+          setShowPinPad(false);
+          if (typeof window !== "undefined") localStorage.setItem("pcontrol_unlocked", "true");
+          toast.success('Security Clearance Granted');
+        }
+        setPinInput('');
+      } else {
+        setPinInput('');
+        if (res.status === 401) {
+          toast.error('Access Denied: Invalid PIN');
+        } else {
+          toast.error(data.error || 'Authentication Error');
+        }
+      }
+    } catch (err) {
+      toast.error('Authentication Error');
+    }
+  }, [isSetupMode]);
+
+  // Global keydown listener for PIN input — no focus needed
+  useEffect(() => {
+    if (isUnlocked || !showPinPad) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is typing in another input
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+      if (/^[0-9]$/.test(e.key)) {
+        setPinInput(prev => {
+          if (prev.length >= 4) return prev;
+          const next = prev + e.key;
+          if (next.length === 4) {
+            setTimeout(() => submitPin(next), 100);
+          }
+          return next;
+        });
+      } else if (e.key === 'Backspace') {
+        setPinInput(prev => prev.slice(0, -1));
+      } else if (e.key === 'Escape' && !isSetupMode) {
+        setShowPinPad(false);
+        setPinInput('');
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isUnlocked, showPinPad, isSetupMode, submitPin]);
+
   const sendControl = async (action: string, value?: any, debounce = false) => {
     if (!isUnlocked) return toast.error("System Locked");
     // Optimistic Update: Hemen yansıt ki kullanıcı slider'da gecikme hissetmesin
@@ -1170,54 +1229,19 @@ export default function ControlPanel() {
             <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest text-center mb-8">
               {isSetupMode ? "Create a 4-digit PIN to secure your dashboard" : "Enter PIN to access advanced system controls"}
             </p>
-            <form onSubmit={async (e) => { 
-              e.preventDefault(); 
-              try {
-                const res = await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin: pinInput }) });
-                const data = await res.json();
-                if (res.ok) { 
-                  if (isSetupMode) {
-                    setIsSetupMode(false);
-                    toast.success('Security PIN Created Successfully');
-                  } else {
-                    setIsUnlocked(true); 
-                    setShowPinPad(false); 
-                    if (typeof window !== "undefined") localStorage.setItem("pcontrol_unlocked", "true"); 
-                    toast.success('Security Clearance Granted'); 
-                  }
-                  setPinInput('');
-                } else { 
-                  setPinInput(''); 
-                  if (res.status === 401) {
-                    toast.error('Access Denied: Invalid PIN'); 
-                  } else {
-                    toast.error(data.error || 'Authentication Error');
-                  }
-                }
-              } catch (err) {
-                toast.error('Authentication Error');
-              }
-            }} className="flex flex-col items-center w-full">
-              <div className="relative w-full group">
-                <input
-                  type="password"
-                  maxLength={4}
-                  value={pinInput}
-                  onChange={e => setPinInput(e.target.value)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-text z-10 block"
-                  autoFocus
-                  autoComplete="off"
-                />
-                <div className="flex items-center justify-center gap-6 bg-zinc-900/50 border border-white/10 group-focus-within:border-red-500/50 rounded-2xl py-6 transition-all">
+            <div className="flex flex-col items-center w-full">
+              <div className="w-full">
+                <div className="flex items-center justify-center gap-6 bg-zinc-900/50 border border-white/10 rounded-2xl py-6 transition-all">
                   {[...Array(4)].map((_, i) => (
                     <div key={i} className={cn("w-3 h-3 rounded-full transition-all duration-300", pinInput.length > i ? "bg-white scale-125 shadow-[0_0_15px_rgba(255,255,255,0.4)]" : "bg-white/10 scale-100")} />
                   ))}
                 </div>
               </div>
-              <button type="submit" className={cn("mt-4 w-full py-4 rounded-2xl transition-colors text-white text-[10px] font-black uppercase tracking-widest shadow-lg", isSetupMode ? "bg-primary hover:bg-primary/80 shadow-primary/20" : "bg-red-500 hover:bg-red-600 shadow-red-500/20")}>
+              <p className="mt-3 text-[9px] text-zinc-600 font-medium tracking-wider uppercase">Type digits on your keyboard</p>
+              <button onClick={() => submitPin(pinInput)} className={cn("mt-4 w-full py-4 rounded-2xl transition-colors text-white text-[10px] font-black uppercase tracking-widest shadow-lg", isSetupMode ? "bg-primary hover:bg-primary/80 shadow-primary/20" : "bg-red-500 hover:bg-red-600 shadow-red-500/20")}>
                 {isSetupMode ? "Initialize Dashboard" : "Authenticate"}
               </button>
-            </form>
+            </div>
           </div>
         </div>
       )}
