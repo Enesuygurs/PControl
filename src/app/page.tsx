@@ -1067,3 +1067,8 @@ export default function ControlPanel() {
                   <div className="flex-1 bg-zinc-950/80 rounded-xl p-3 font-mono text-[9px] overflow-hidden group">
                     <div className="h-24 overflow-y-auto space-y-2 no-scrollbar">
                       {cmdLog.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full opacity-20">
+                          <Terminal className="w-6 h-6 mb-2" />
+                          <p>Ready for input</p>
+                        </div>
+                      ) : (
