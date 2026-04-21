@@ -1071,3 +1071,274 @@ export default function ControlPanel() {
                           <p>Ready for input</p>
                         </div>
                       ) : (
+                        cmdLog.map((log: any, i: number) => (
+                          <div key={i} className="space-y-1">
+                            <div className="flex items-center gap-2 text-zinc-500">
+                              <span className="text-primary">PS C:\&gt;</span>
+                              <span>{log.cmd}</span>
+                            </div>
+                            <div className="text-zinc-300 pl-4 break-all whitespace-pre-wrap">{log.output}</div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </ControlSection>
+            </div>
+          </div>
+
+        </main>
+      </div>
+
+      <AnimatePresence>
+        {showFileExplorer && isUnlocked && (
+          <FileExplorer onClose={() => setShowFileExplorer(false)} />
+        )}
+      </AnimatePresence>
+
+      {!isUnlocked && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xl p-4">
+          <div className="p-8 rounded-[3rem] bg-zinc-900/80 border border-white/10 shadow-2xl max-w-sm w-full">
+            <div className="text-center mb-8">
+              <div className="inline-flex p-4 rounded-full bg-primary/10 text-primary mb-4">
+                <Lock className="w-8 h-8" />
+              </div>
+              <h2 className="text-2xl font-bold font-sora text-white">System Locked</h2>
+              <p className="text-xs text-zinc-500 mt-2 font-medium">Enter authorization pin to access</p>
+            </div>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                const res = await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin: pinInput }) });
+                const data = await res.json();
+                if (data.success) {
+                  setIsUnlocked(true);
+                  setPinInput("");
+                  toast.success("System Unlocked");
+                } else {
+                  toast.error("Invalid Pin");
+                  setPinInput("");
+                }
+              } catch (err) {
+                toast.error("Auth error");
+              }
+            }}>
+              <input
+                type="password"
+                value={pinInput}
+                onChange={(e) => setPinInput(e.target.value)}
+                placeholder="Enter PIN"
+                className="w-full bg-zinc-950 border border-white/10 rounded-2xl p-4 text-center text-2xl tracking-[0.5em] focus:outline-none focus:border-primary/50 transition-all font-sora font-black text-white placeholder:text-zinc-700 placeholder:tracking-normal placeholder:font-medium placeholder:text-sm"
+                autoFocus
+              />
+            </form>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
+
+function MetricCard({ icon, label, value, progress, color }: any) {
+  const colors: any = {
+    primary: "from-primary to-primary shadow-primary/20",
+    purple: "from-purple-500 to-purple-600 shadow-purple-500/20",
+    emerald: "from-emerald-500 to-emerald-600 shadow-emerald-500/20",
+    orange: "from-orange-500 to-orange-600 shadow-orange-500/20",
+    amber: "from-amber-500 to-amber-600 shadow-amber-500/20",
+    red: "from-red-500 to-red-600 shadow-red-500/20",
+    cyan: "from-cyan-400 to-cyan-500 shadow-cyan-400/20",
+    blue: "from-blue-500 to-blue-600 shadow-blue-500/20",
+    pink: "from-pink-500 to-rose-500 shadow-pink-500/20",
+  };
+
+  const textColors: any = {
+    primary: "text-primary",
+    purple: "text-purple-400",
+    emerald: "text-emerald-400",
+    orange: "text-orange-400",
+    amber: "text-amber-400",
+    red: "text-red-400",
+    cyan: "text-cyan-400",
+    blue: "text-blue-400",
+    pink: "text-pink-400",
+  };
+
+  return (
+    <motion.div variants={item} className="p-6 rounded-[2.5rem] bg-zinc-900/20 border border-white/5 backdrop-blur-md relative overflow-hidden">
+      <div className="flex items-center gap-3 mb-4">
+        <div className={cn(textColors[color])}>
+          {icon}
+        </div>
+        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">{label}</span>
+      </div>
+      <div className="text-3xl font-black font-sora mb-4">{value}</div>
+      <div className="h-1.5 bg-zinc-800/50 rounded-full overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${Math.min(100, progress)}%` }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className={cn("h-full bg-gradient-to-r shadow-lg", colors[color])}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+function ControlSlider({ value, onChange, color, label }: any) {
+  const colors: any = {
+    indigo: "bg-indigo-500",
+    amber: "bg-amber-500",
+    primary: "bg-primary",
+  };
+
+  const [localValue, setLocalValue] = useState(value);
+  const isDragging = useRef(false);
+
+  useEffect(() => {
+    if (!isDragging.current) {
+      setLocalValue(value);
+    }
+  }, [value]);
+
+  const handlePointerUp = () => {
+    isDragging.current = false;
+    onChange(localValue);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="relative h-16 bg-zinc-800/30 rounded-2xl overflow-hidden cursor-pointer group border border-white/5">
+        <motion.div
+          initial={false}
+          animate={{ width: `${localValue}%` }}
+          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          className={cn("absolute inset-y-0 left-0 opacity-80", colors[color])}
+        />
+        <input
+          type="range"
+          min="0" max="100"
+          value={localValue}
+          onPointerDown={() => { isDragging.current = true; }}
+          onChange={(e) => setLocalValue(parseInt(e.target.value))}
+          onPointerUp={handlePointerUp}
+          onTouchEnd={handlePointerUp}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+        />
+        <div className="absolute inset-0 flex items-center justify-between px-6 pointer-events-none">
+          <span className="text-xs font-black uppercase tracking-widest text-white/40">Drill to Adjust</span>
+          <span className="text-xl font-black text-white">{label ? label.replace(value, localValue) : `${localValue}%`}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function QuickValue({ value, onClick, active }: any) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "py-3 rounded-xl text-[10px] font-black uppercase tracking-tighter transition-all border",
+        active
+          ? "bg-indigo-500 border-indigo-500 text-white shadow-lg"
+          : "bg-zinc-800/30 border-white/5 text-zinc-500 hover:bg-zinc-800"
+      )}
+    >
+      {value}%
+    </button>
+  );
+}
+
+function ActionButton({ icon, label }: any) {
+  return (
+    <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-800/50 border border-white/5 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all">
+      {icon} {label}
+    </button>
+  );
+}
+
+function ControlSection({ title, icon, children }: any) {
+  return (
+    <div className="p-6 rounded-[2.5rem] bg-zinc-900/20 border border-white/5 flex flex-col h-full">
+      <div className="flex items-center gap-2 mb-6">
+        <div className="text-indigo-500">{icon}</div>
+        <h3 className="text-[10px] font-black tracking-[0.2em] uppercase text-zinc-500">{title}</h3>
+      </div>
+      <div className="flex-1">{children}</div>
+    </div>
+  );
+}
+
+function AppHubButton({ icon, label, onClick, variant }: any) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "flex flex-col items-center justify-center gap-3 p-4 rounded-3xl border transition-all",
+        variant === "danger"
+          ? "bg-red-500/5 border-red-500/10 text-red-400 hover:bg-red-500/10"
+          : "bg-zinc-800/20 border-white/5 text-zinc-400 hover:text-indigo-400 hover:bg-indigo-500/5 hover:border-indigo-500/10"
+      )}
+    >
+      <div className="opacity-50 group-hover:opacity-100">{icon}</div>
+      <span className="text-[8px] font-black uppercase tracking-widest">{label}</span>
+    </button>
+  );
+}
+
+function MediaCtrl({ icon, highlight, onClick }: any) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "p-5 rounded-2xl transition-all",
+        highlight
+          ? "bg-indigo-500 text-white shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+          : "text-zinc-500 hover:text-white"
+      )}
+    >
+      {icon}
+    </button>
+  );
+}
+
+function FullPowerButton({ icon, label, desc, active, onClick, color }: any) {
+  const colors: any = {
+    indigo: active ? "border-indigo-500 bg-indigo-500/10 text-indigo-100" : "hover:border-indigo-500/50 hover:bg-indigo-500/5",
+    amber: active ? "border-amber-500 bg-amber-500/10 text-amber-100" : "hover:border-amber-500/50 hover:bg-amber-500/5",
+    red: active ? "border-red-500 bg-red-500/10 text-red-100" : "hover:border-red-500/50 hover:bg-red-500/5",
+  };
+
+  const ringColors: any = {
+    indigo: "text-indigo-500",
+    amber: "text-amber-500",
+    red: "text-red-500",
+  };
+
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "w-full flex items-center gap-5 p-5 rounded-[2rem] border border-white/5 transition-all text-left group",
+        colors[color]
+      )}
+    >
+      <div className={cn(
+        "p-4 rounded-2xl bg-zinc-800/50 transition-all",
+        active ? "bg-white text-black" : `group-hover:${ringColors[color]} group-hover:bg-opacity-20`
+      )}>
+        {active ? <Tally3 className="animate-spin-slow" /> : icon}
+      </div>
+      <div className="flex-1">
+        <p className="font-bold text-sm font-sora">{active ? "Click Again to Confirm" : label}</p>
+        <p className="text-[10px] font-medium text-zinc-500">{desc}</p>
+      </div>
+      {active && (
+        <div className={cn("w-2 h-2 rounded-full animate-pulse", `bg-${color}-500`)} />
+      )}
+    </button>
+  );
+}

@@ -1,4 +1,4 @@
-﻿
+
 import { spawn } from "child_process";
 import si from "systeminformation";
 
@@ -395,3 +395,59 @@ export async function getScreenshot(): Promise<string> {
     [Convert]::ToBase64String($ms.ToArray())
   `;
   return await runPowerShell(script);
+}
+
+export async function getClipboard(): Promise<string> {
+  try {
+    return await runPowerShell("Get-Clipboard -Raw -ErrorAction SilentlyContinue");
+  } catch (e) {
+    return "";
+  }
+}
+
+export async function setClipboard(text: string): Promise<void> {
+  const b64 = Buffer.from(text, "utf-8").toString("base64");
+  psBridge.send(`[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64}')) | Set-Clipboard`);
+}
+
+export async function openUrl(url: string): Promise<void> {
+  runPowerShell(`Start-Process "${url}"`);
+}
+
+export async function setShutdownTimer(minutes: number): Promise<void> {
+  if (minutes > 0) {
+    psBridge.send(`shutdown -s -t ${minutes * 60}`);
+  } else {
+    psBridge.send(`shutdown -a`);
+  }
+}
+
+export async function showStickyNote(msg: string): Promise<void> {
+  const b64 = Buffer.from(msg, "utf-8").toString("base64");
+  const script = `
+    Add-Type -AssemblyName System.Windows.Forms;
+    $msg = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64}'));
+    [System.Windows.Forms.MessageBox]::Show($msg, "PControl Alert", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information);
+  `;
+  runPowerShell(script);
+}
+
+export async function toggleSecurity(action: string): Promise<void> {
+  if (action === "lock") {
+    psBridge.send("rundll32.exe user32.dll,LockWorkStation");
+  }
+}
+
+
+
+export async function getBatteryStatus() {
+  try {
+    const bat = await si.battery();
+    return {
+      percentage: bat.percent,
+      isCharging: bat.isCharging
+    };
+  } catch (e) {
+    return { percentage: 100, isCharging: true };
+  }
+}
