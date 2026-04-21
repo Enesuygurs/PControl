@@ -1151,6 +1151,7 @@ export default function ControlPanel() {
               e.preventDefault(); 
               try {
                 const res = await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin: pinInput }) });
+                const data = await res.json();
                 if (res.ok) { 
                   setIsUnlocked(true); 
                   setShowPinPad(false); 
@@ -1158,7 +1159,11 @@ export default function ControlPanel() {
                   toast.success('Security Clearance Granted'); 
                 } else { 
                   setPinInput(''); 
-                  toast.error('Access Denied'); 
+                  if (res.status === 401) {
+                    toast.error('Access Denied: Invalid PIN'); 
+                  } else {
+                    toast.error(data.error || 'Authentication Error');
+                  }
                 }
               } catch (err) {
                 toast.error('Authentication Error');
