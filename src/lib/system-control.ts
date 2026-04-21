@@ -1,4 +1,3 @@
-
 import { spawn } from "child_process";
 import si from "systeminformation";
 
@@ -397,57 +396,141 @@ export async function getScreenshot(): Promise<string> {
   return await runPowerShell(script);
 }
 
-export async function getClipboard(): Promise<string> {
+export async function getBatteryStatus() {
+  const script = `Get-CimInstance -ClassName Win32_Battery -ErrorAction SilentlyContinue | Select-Object EstimatedChargeRemaining, BatteryStatus | ConvertTo-Json`;
   try {
-    return await runPowerShell("Get-Clipboard -Raw -ErrorAction SilentlyContinue");
+    const res = await runPowerShell(script);
+    if (!res) return null;
+    const data = JSON.parse(res);
+    return {
+      percentage: data.EstimatedChargeRemaining,
+      isCharging: data.BatteryStatus === 2 || data.BatteryStatus === 6 || data.BatteryStatus === 7 || data.BatteryStatus === 8
+    };
   } catch (e) {
-    return "";
+    return null;
   }
+}
+
+export async function getClipboard(): Promise<string> {
+  // Use [System.Windows.Forms.Clipboard] for better compatibility across PS versions
+  return await runPowerShell("Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::GetText()");
 }
 
 export async function setClipboard(text: string): Promise<void> {
-  const b64 = Buffer.from(text, "utf-8").toString("base64");
-  psBridge.send(`[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64}')) | Set-Clipboard`);
+  const escaped = text.replace(/"/g, '`"');
+  psBridge.send(`Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.Clipboard]::SetText("${escaped}");`);
 }
 
 export async function openUrl(url: string): Promise<void> {
-  runPowerShell(`Start-Process "${url}"`);
+  let safeUrl = url.trim().replace(/"/g, '`"');
+  if (!safeUrl.startsWith("http")) {
+    safeUrl = "http://" + safeUrl;
+  }
+  await runPowerShell(`Start-Process "${safeUrl}"`);
 }
 
-export async function setShutdownTimer(minutes: number): Promise<void> {
-  if (minutes > 0) {
-    psBridge.send(`shutdown -s -t ${minutes * 60}`);
+export async function setShutdownTimer(minutes: number | "cancel"): Promise<void> {
+  if (minutes === "cancel") {
+    psBridge.send("shutdown /a");
   } else {
-    psBridge.send(`shutdown -a`);
+    const seconds = minutes * 60;
+    psBridge.send(`shutdown /s /t ${seconds} /f`);
   }
 }
 
-export async function showStickyNote(msg: string): Promise<void> {
-  const b64 = Buffer.from(msg, "utf-8").toString("base64");
+/**
+ * ADVANCED HUB: STICKY NOTE, SECURITY, ALERTS
+ */
+import { EventEmitter } from "events";
+export const SecurityBridge = new EventEmitter();
+
+let securityProcess: any = null;
+
+export async function showStickyNote(text: string): Promise<void> {
+  const escaped = text.replace(/"/g, '`"').replace(/\n/g, '`n');
   const script = `
-    Add-Type -AssemblyName System.Windows.Forms;
-    $msg = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('${b64}'));
-    [System.Windows.Forms.MessageBox]::Show($msg, "PControl Alert", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information);
+    Add-Type -AssemblyName System.Windows.Forms, System.Drawing;
+    $f = New-Object Windows.Forms.Form;
+    $f.Text = 'Remote Sticky';
+    $f.BackColor = [System.Drawing.Color]::FromArgb(255, 255, 128);
+    $f.TopMost = $true;
+    $f.FormBorderStyle = 'None';
+    $f.StartPosition = 'CenterScreen';
+    
+    $font = New-Object System.Drawing.Font('Segoe UI', 10, [System.Drawing.FontStyle]::Bold);
+    $maxSize = New-Object System.Drawing.Size(250, 2000);
+    $flags = [System.Windows.Forms.TextFormatFlags]::WordBreak -bor [System.Windows.Forms.TextFormatFlags]::HorizontalCenter;
+    $size = [System.Windows.Forms.TextRenderer]::MeasureText("${escaped}", $font, $maxSize, $flags);
+    
+    $f.Width = $size.Width + 40;
+    $f.Height = $size.Height + 40;
+
+    $l = New-Object Windows.Forms.Label;
+    $l.Text = "${escaped}";
+    $l.Font = $font;
+    $l.Location = New-Object System.Drawing.Point(20, 20);
+    $l.Size = $size;
+    $l.TextAlign = 'MiddleCenter';
+    $f.Controls.Add($l);
+
+    # Drag logic
+    
+    # Drag logic
+    $mouseDown = $false;
+    $mousePos = New-Object System.Drawing.Point;
+    $f.Add_MouseDown({
+        $script:mouseDown = $true;
+        $script:mousePos = [Windows.Forms.Control]::MousePosition;
+        $script:formPos = $f.Location;
+    });
+    $f.Add_MouseMove({
+        if ($script:mouseDown) {
+            $diff = [System.Drawing.Point]::Subtract([Windows.Forms.Control]::MousePosition, $script:mousePos);
+            $f.Location = [System.Drawing.Point]::Add($script:formPos, $diff);
+        }
+    });
+    $f.Add_MouseUp({ $script:mouseDown = $false; });
+    
+    # Also apply drag to label so user can drag by the text
+    $l.Add_MouseDown({
+        $script:mouseDown = $true;
+        $script:mousePos = [Windows.Forms.Control]::MousePosition;
+        $script:formPos = $f.Location;
+    });
+    $l.Add_MouseMove({
+        if ($script:mouseDown) {
+            $diff = [System.Drawing.Point]::Subtract([Windows.Forms.Control]::MousePosition, $script:mousePos);
+            $f.Location = [System.Drawing.Point]::Add($script:formPos, $diff);
+        }
+    });
+    $l.Add_MouseUp({ $script:mouseDown = $false; });
+
+    $closeBtn.Add_Click({ $f.Close() });
+    
+    [System.Windows.Forms.Application]::Run($f);
   `;
-  runPowerShell(script);
+  // Run as one-shot to avoid blocking the bridge
+  runPowerShell(script).catch(e => console.error("Sticky note error:", e));
 }
 
-export async function toggleSecurity(action: string): Promise<void> {
-  if (action === "lock") {
-    psBridge.send("rundll32.exe user32.dll,LockWorkStation");
+export async function toggleSecurity(armed: boolean): Promise<void> {
+  if (armed && !securityProcess) {
+    // Start USB Monitor
+    securityProcess = spawn("powershell.exe", [
+      "-NoProfile", "-NonInteractive", "-Command",
+      `$query = "SELECT * FROM __InstanceCreationEvent WITHIN 2 WHERE TargetInstance ISA 'Win32_USBControllerDevice'"; Register-CimIndicationEvent -Query $query -SourceIdentifier 'USBMod'; while($true) { if (Get-Event -SourceIdentifier 'USBMod' -ErrorAction SilentlyContinue) { Write-Host 'ALARM_USB'; Remove-Event -SourceIdentifier 'USBMod' }; Start-Sleep -s 1 }`
+    ]);
+    
+    securityProcess.stdout.on("data", (data: any) => {
+      const msg = data.toString();
+      if (msg.includes("ALARM_USB")) {
+        SecurityBridge.emit("intrusion", { type: "USB", time: Date.now() });
+      }
+    });
+  } else if (!armed && securityProcess) {
+    securityProcess.kill();
+    securityProcess = null;
   }
 }
 
 
-
-export async function getBatteryStatus() {
-  try {
-    const bat = await si.battery();
-    return {
-      percentage: bat.percent,
-      isCharging: bat.isCharging
-    };
-  } catch (e) {
-    return { percentage: 100, isCharging: true };
-  }
-}

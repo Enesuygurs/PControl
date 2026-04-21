@@ -1,4 +1,3 @@
-﻿
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -1071,13 +1070,10 @@ export default function ControlPanel() {
                           <p>Ready for input</p>
                         </div>
                       ) : (
-                        cmdLog.map((log: any, i: number) => (
-                          <div key={i} className="space-y-1">
-                            <div className="flex items-center gap-2 text-zinc-500">
-                              <span className="text-primary">PS C:\&gt;</span>
-                              <span>{log.cmd}</span>
-                            </div>
-                            <div className="text-zinc-300 pl-4 break-all whitespace-pre-wrap">{log.output}</div>
+                        cmdLog.map((log, i) => (
+                          <div key={i} className="border-b border-white/5 pb-2 last:border-0">
+                            <p className="text-primary opacity-80 mb-1">$ {log.cmd}</p>
+                            <pre className="text-zinc-400 whitespace-pre-wrap leading-relaxed">{log.output}</pre>
                           </div>
                         ))
                       )}
@@ -1087,51 +1083,106 @@ export default function ControlPanel() {
               </ControlSection>
             </div>
           </div>
-
         </main>
+
+        {/* Sidebar / Power Section */}
+        <aside className={cn("space-y-6 transition-all duration-700 relative w-full", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+          <div className="p-8 rounded-[3rem] bg-indigo-600/10 border border-indigo-500/20 backdrop-blur-xl relative overflow-hidden group h-fit">
+            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+              <Power className="w-32 h-32 rotate-12" />
+            </div>
+            <h2 className="text-xl font-bold font-sora mb-1 relative">Power Hub</h2>
+            <p className="text-xs text-indigo-300 font-medium mb-8 relative">System state management</p>
+
+            <div className="space-y-4 relative">
+              <FullPowerButton
+                icon={<Moon />}
+                label="Enter Sleep Mode"
+                desc="Suspend to low-power"
+                active={powerAction === "sleep"}
+                onClick={() => handlePower("sleep")}
+                color="indigo"
+              />
+              <FullPowerButton
+                icon={<RotateCcw />}
+                label="Reboot System"
+                desc="Restart all services"
+                active={powerAction === "restart"}
+                onClick={() => handlePower("restart")}
+                color="amber"
+              />
+              <FullPowerButton
+                icon={<Power />}
+                label="Fatal Shutdown"
+                desc="Kill all processes"
+                active={powerAction === "shutdown"}
+                onClick={() => handlePower("shutdown")}
+                color="red"
+              />
+            </div>
+          </div>
+
+        </aside>
+
+        <AnimatePresence>
+          {showFileExplorer && isUnlocked && (
+            <FileExplorer onClose={() => setShowFileExplorer(false)} />
+          )}
+        </AnimatePresence>
       </div>
 
-      <AnimatePresence>
-        {showFileExplorer && isUnlocked && (
-          <FileExplorer onClose={() => setShowFileExplorer(false)} />
-        )}
-      </AnimatePresence>
+      <footer className="max-w-7xl mx-auto mt-12 py-8 border-t border-white/5 flex justify-between items-center text-zinc-600 relative z-10">
+        <p className="text-[10px] font-black uppercase tracking-[0.4em]">Antigravity Node Interface</p>
+        <p className="text-[10px] font-bold">V2.4.0 • STABLE BUILD</p>
+      </footer>
 
-      {!isUnlocked && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xl p-4">
-          <div className="p-8 rounded-[3rem] bg-zinc-900/80 border border-white/10 shadow-2xl max-w-sm w-full">
-            <div className="text-center mb-8">
-              <div className="inline-flex p-4 rounded-full bg-primary/10 text-primary mb-4">
-                <Lock className="w-8 h-8" />
-              </div>
-              <h2 className="text-2xl font-bold font-sora text-white">System Locked</h2>
-              <p className="text-xs text-zinc-500 mt-2 font-medium">Enter authorization pin to access</p>
+      {!isUnlocked && showPinPad && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 pointer-events-none">
+          <div className="relative p-8 rounded-[3rem] bg-zinc-950/90 border border-red-500/30 backdrop-blur-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-col items-center pointer-events-auto w-full max-w-sm">
+            <button onClick={() => setShowPinPad(false)} className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/10 text-zinc-500 hover:text-white transition-colors">
+              <XCircle className="w-5 h-5" />
+            </button>
+            <div className="p-4 rounded-3xl bg-red-500/10 mb-6 drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+              <Lock className="w-8 h-8 text-red-500" />
             </div>
-            <form onSubmit={async (e) => {
-              e.preventDefault();
+            <h2 className="text-xl font-bold font-sora text-white mb-2">CLASSIFIED CLEARANCE</h2>
+            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest text-center mb-8">Enter PIN to access advanced system controls</p>
+            <form onSubmit={async (e) => { 
+              e.preventDefault(); 
               try {
                 const res = await fetch("/api/auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ pin: pinInput }) });
-                const data = await res.json();
-                if (data.success) {
-                  setIsUnlocked(true);
-                  setPinInput("");
-                  toast.success("System Unlocked");
-                } else {
-                  toast.error("Invalid Pin");
-                  setPinInput("");
+                if (res.ok) { 
+                  setIsUnlocked(true); 
+                  setShowPinPad(false); 
+                  if (typeof window !== "undefined") localStorage.setItem("pcontrol_unlocked", "true"); 
+                  toast.success('Security Clearance Granted'); 
+                } else { 
+                  setPinInput(''); 
+                  toast.error('Access Denied'); 
                 }
               } catch (err) {
-                toast.error("Auth error");
+                toast.error('Authentication Error');
               }
-            }}>
-              <input
-                type="password"
-                value={pinInput}
-                onChange={(e) => setPinInput(e.target.value)}
-                placeholder="Enter PIN"
-                className="w-full bg-zinc-950 border border-white/10 rounded-2xl p-4 text-center text-2xl tracking-[0.5em] focus:outline-none focus:border-primary/50 transition-all font-sora font-black text-white placeholder:text-zinc-700 placeholder:tracking-normal placeholder:font-medium placeholder:text-sm"
-                autoFocus
-              />
+            }} className="flex flex-col items-center w-full">
+              <div className="relative w-full group">
+                <input
+                  type="password"
+                  maxLength={4}
+                  value={pinInput}
+                  onChange={e => setPinInput(e.target.value)}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-text z-10 block"
+                  autoFocus
+                  autoComplete="off"
+                />
+                <div className="flex items-center justify-center gap-6 bg-zinc-900/50 border border-white/10 group-focus-within:border-red-500/50 rounded-2xl py-6 transition-all">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className={cn("w-3 h-3 rounded-full transition-all duration-300", pinInput.length > i ? "bg-white scale-125 shadow-[0_0_15px_rgba(255,255,255,0.4)]" : "bg-white/10 scale-100")} />
+                  ))}
+                </div>
+              </div>
+              <button type="submit" className="mt-4 w-full py-4 rounded-2xl bg-red-500 hover:bg-red-600 transition-colors text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-red-500/20">
+                Authenticate
+              </button>
             </form>
           </div>
         </div>
@@ -1342,3 +1393,4 @@ function FullPowerButton({ icon, label, desc, active, onClick, color }: any) {
     </button>
   );
 }
+
