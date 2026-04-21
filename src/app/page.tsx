@@ -1154,8 +1154,10 @@ export default function ControlPanel() {
       </footer>
 
       {!isUnlocked && showPinPad && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 pointer-events-none">
-          <div className="relative p-8 rounded-[3rem] bg-zinc-950/90 border border-red-500/30 backdrop-blur-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-col items-center pointer-events-auto w-full max-w-sm">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          {/* Full-screen opaque blur backdrop */}
+          <div className="absolute inset-0 bg-[#050507]/95 backdrop-blur-[40px]" />
+          <div className="relative p-8 rounded-[3rem] bg-zinc-950/90 border border-red-500/30 backdrop-blur-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] flex flex-col items-center w-full max-w-sm z-10">
             {!isSetupMode && (
               <button onClick={() => setShowPinPad(false)} className="absolute top-6 right-6 p-2 rounded-full hover:bg-white/10 text-zinc-500 hover:text-white transition-colors">
                 <XCircle className="w-5 h-5" />
