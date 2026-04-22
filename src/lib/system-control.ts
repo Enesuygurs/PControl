@@ -259,6 +259,31 @@ export async function getNetworkSpeed() {
   }
 }
 
+export async function getDisplays() {
+  try {
+    const graphics = await si.graphics();
+    return graphics.displays.map(d => ({
+      name: d.model || d.deviceName || "Unknown Display",
+      resolution: `${d.currentResX}x${d.currentResY}`,
+      refreshRate: d.currentRefreshRate,
+      isMain: d.main,
+      connection: d.connection
+    }));
+  } catch (e) {
+    console.error("Failed to fetch displays:", e);
+    return [];
+  }
+}
+
+export async function setDisplayMode(mode: "internal" | "clone" | "extend" | "external"): Promise<void> {
+  // Use DisplaySwitch.exe for Windows projection modes
+  // /internal - PC screen only
+  // /clone - Duplicate
+  // /extend - Extend
+  // /external - Second screen only
+  await runPowerShell(`DisplaySwitch.exe /${mode}`);
+}
+
 export async function getWifiSignal(): Promise<number> {
   try {
     const res = await runPowerShell("(netsh wlan show interfaces) | Select-String 'Signal'");

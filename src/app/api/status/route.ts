@@ -9,7 +9,8 @@ import {
   getMediaMetadata,
   getBatteryStatus,
   getWifiSignal,
-  getAudioDevices
+  getAudioDevices,
+  getDisplays
 } from "@/lib/system-control";
 import si from "systeminformation";
 import os from "os";
@@ -30,7 +31,8 @@ export async function GET() {
       muteStatus,
       brightLevel,
       wifiInfo,
-      audioList
+      audioList,
+      displayList
     ] = await Promise.all([
       si.currentLoad(),
       si.mem(),
@@ -43,7 +45,8 @@ export async function GET() {
       isMuted(),
       getBrightness(),
       getWifiSignal(),
-      getAudioDevices()
+      getAudioDevices(),
+      getDisplays()
     ]);
 
     return NextResponse.json({
@@ -64,7 +67,8 @@ export async function GET() {
       isMuted: muteStatus,
       brightness: brightLevel,
       wifi: wifiInfo,
-      audioDevices: audioList
+      audioDevices: audioList,
+      displays: displayList
     });
   } catch (error) {
     console.error("Status API Error:", error);

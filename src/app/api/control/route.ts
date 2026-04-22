@@ -17,7 +17,8 @@ import {
   setShutdownTimer,
   showStickyNote,
   toggleSecurity,
-  setAudioDevice
+  setAudioDevice,
+  setDisplayMode
 } from "@/lib/system-control";
 
 export async function POST(req: Request) {
@@ -84,6 +85,9 @@ export async function POST(req: Request) {
         break;
       case "set-audio-device":
         await setAudioDevice(value);
+        break;
+      case "set-display-mode":
+        await setDisplayMode(value);
         break;
       default:
         return NextResponse.json({ error: "Invalid action" }, { status: 400 });

@@ -78,6 +78,7 @@ interface SystemStatus {
   txSpeed: number;
   wifi: number;
   audioDevices?: { Index: number; Name: string; Default: boolean }[];
+  displays?: { name: string; resolution: string; refreshRate: number; isMain: boolean; connection: string }[];
   media: {
     Title: string;
     Artist: string;
@@ -1085,6 +1086,70 @@ export default function ControlPanel() {
                   {[0, 50, 75, 100].map(v => (
                     <QuickValue key={v} value={v} onClick={() => sendControl("brightness", v)} active={status?.brightness === v} />
                   ))}
+                </div>
+
+                {/* Display Management */}
+                <div className="pt-6 border-t border-white/5 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Monitor className="w-4 h-4 text-zinc-500" />
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Display Management</h4>
+                  </div>
+                  
+                  {/* Connected Displays */}
+                  <div className="grid grid-cols-1 gap-2">
+                    {status?.displays?.map((display, i) => (
+                      <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-zinc-800/30 border border-white/5">
+                        <div className="flex items-center gap-3">
+                          <div className={cn("p-2 rounded-lg", display.isMain ? "bg-amber-500/20 text-amber-500" : "bg-zinc-700/30 text-zinc-500")}>
+                            <Monitor className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold font-sora text-white truncate max-w-[150px]">{display.name}</p>
+                            <p className="text-[8px] font-medium text-zinc-500 uppercase tracking-widest">{display.resolution} @ {display.refreshRate}Hz</p>
+                          </div>
+                        </div>
+                        {display.isMain && <span className="text-[8px] font-black uppercase tracking-widest px-2 py-1 bg-amber-500/10 text-amber-500 rounded-md border border-amber-500/20">Main</span>}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Projection Modes */}
+                  <div className="grid grid-cols-2 gap-2 mt-4">
+                    <button 
+                      onClick={() => executeControl("set-display-mode", "internal")}
+                      className="flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
+                    >
+                      <Monitor className="w-5 h-5 mb-2 text-zinc-500 group-hover:text-amber-500" />
+                      <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">PC Screen Only</span>
+                    </button>
+                    <button 
+                      onClick={() => executeControl("set-display-mode", "clone")}
+                      className="flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
+                    >
+                      <div className="relative mb-2">
+                        <Monitor className="w-5 h-5 text-zinc-500 group-hover:text-amber-500" />
+                        <Monitor className="w-3 h-3 text-zinc-500 group-hover:text-amber-500 absolute -bottom-1 -right-1 bg-zinc-950 rounded-sm" />
+                      </div>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Duplicate</span>
+                    </button>
+                    <button 
+                      onClick={() => executeControl("set-display-mode", "extend")}
+                      className="flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
+                    >
+                      <div className="flex gap-1 mb-2">
+                        <Monitor className="w-5 h-5 text-zinc-500 group-hover:text-amber-500" />
+                        <div className="w-2 h-5 bg-zinc-700/50 rounded-sm" />
+                      </div>
+                      <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Extend</span>
+                    </button>
+                    <button 
+                      onClick={() => executeControl("set-display-mode", "external")}
+                      className="flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
+                    >
+                      <ExternalLink className="w-5 h-5 mb-2 text-zinc-500 group-hover:text-amber-500" />
+                      <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Second Screen Only</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </section>
