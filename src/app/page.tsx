@@ -778,7 +778,7 @@ export default function ControlPanel() {
 
           <div className={cn("grid lg:grid-cols-[2fr_1fr] gap-8 transition-all duration-700 relative", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
             {/* Clipboard Hub */}
-            <div className="p-6 md:p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md">
+            <div className="p-6 md:p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md flex flex-col">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500">
@@ -806,7 +806,7 @@ export default function ControlPanel() {
                 value={clipInput}
                 onChange={(e) => setClipInput(e.target.value)}
                 placeholder="Paste here to send to PC, or pull to see PC clipboard..."
-                className="w-full h-24 bg-zinc-950/50 border border-white/10 rounded-2xl p-4 text-xs font-medium focus:outline-none focus:border-amber-500/50 transition-all resize-none custom-scrollbar"
+                className="w-full flex-1 min-h-[96px] bg-zinc-950/50 border border-white/10 rounded-2xl p-4 text-xs font-medium focus:outline-none focus:border-amber-500/50 transition-all resize-none custom-scrollbar"
               />
             </div>
 
