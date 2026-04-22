@@ -8,6 +8,10 @@ const dev = !app.isPackaged;
 const port = 3000;
 const hostname = '0.0.0.0';
 
+// Ensure correct working directory when started from Windows startup
+// (Windows sets cwd to C:\Windows\System32 for auto-start apps)
+process.chdir(__dirname);
+
 let tray = null;
 let nextServer = null;
 

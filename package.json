@@ -52,7 +52,9 @@
       "public/**/*",
       "main.js",
       "package.json",
-      "src/lib/system-control.ts"
+      "next.config.ts",
+      "AudioDeviceCmdlets.dll",
+      "src/**/*"
     ],
     "asar": false
   }
