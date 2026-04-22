@@ -976,8 +976,9 @@ export default function ControlPanel() {
             )}
           </AnimatePresence>
 
-          {/* Main Controls */}
+          {/* Main Controls - Identical Sizes */}
           <div className={cn("grid lg:grid-cols-2 gap-8 transition-all duration-700 relative", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+            {/* Volume Card */}
             <section className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-8 backdrop-blur-md flex flex-col">
               <div className="flex items-center justify-between min-h-[72px]">
                 <div className="flex items-center gap-4">
@@ -1015,44 +1016,10 @@ export default function ControlPanel() {
                     <QuickValue key={v} value={v} onClick={() => sendControl("volume", v)} active={status?.volume === v} />
                   ))}
                 </div>
-
-                {/* Audio Output Router */}
-                {status?.audioDevices && status.audioDevices.length > 0 && (
-                  <div className="pt-6 border-t border-white/5 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <Music className="w-4 h-4 text-zinc-500" />
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Audio Routing</h4>
-                    </div>
-                    <div className="grid grid-cols-1 gap-2">
-                      {status.audioDevices.map((device) => (
-                        <button
-                          key={device.Index}
-                          onClick={() => {
-                            executeControl("set-audio-device", device.Index);
-                            setTimeout(() => fetchStatus(true), 1500); // Wait for windows to apply and refresh
-                          }}
-                          className={cn(
-                            "flex items-center justify-between p-4 rounded-2xl border transition-all text-left",
-                            device.Default
-                              ? "bg-primary/10 border-primary/30 shadow-[0_0_15px_rgba(245,158,11,0.1)]"
-                              : "bg-zinc-800/30 border-white/5 hover:bg-zinc-800/50 hover:border-white/10"
-                          )}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={cn("w-2 h-2 rounded-full", device.Default ? "bg-primary shadow-[0_0_10px_rgba(245,158,11,1)]" : "bg-zinc-600")} />
-                            <span className={cn("text-xs font-bold font-sora", device.Default ? "text-primary" : "text-zinc-400")}>
-                              {device.Name}
-                            </span>
-                          </div>
-                          {device.Default && <span className="text-[8px] font-black uppercase tracking-widest text-primary/70">Active</span>}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
             </section>
 
+            {/* Brightness Card */}
             <section className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-8 backdrop-blur-md flex flex-col">
               <div className="flex items-center justify-between min-h-[72px]">
                 <div className="flex items-center gap-4">
@@ -1087,70 +1054,123 @@ export default function ControlPanel() {
                     <QuickValue key={v} value={v} onClick={() => sendControl("brightness", v)} active={status?.brightness === v} />
                   ))}
                 </div>
+              </div>
+            </section>
+          </div>
 
-                {/* Display Management */}
-                <div className="pt-6 border-t border-white/5 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Monitor className="w-4 h-4 text-zinc-500" />
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Display Management</h4>
-                  </div>
-                  
-                  {/* Connected Displays */}
-                  <div className="grid grid-cols-1 gap-2">
-                    {status?.displays?.map((display, i) => (
-                      <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-zinc-800/30 border border-white/5">
-                        <div className="flex items-center gap-3">
-                          <div className={cn("p-2 rounded-lg", display.isMain ? "bg-amber-500/20 text-amber-500" : "bg-zinc-700/30 text-zinc-500")}>
-                            <Monitor className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <p className="text-xs font-bold font-sora text-white truncate max-w-[150px]">{display.name}</p>
-                            <p className="text-[8px] font-medium text-zinc-500 uppercase tracking-widest">{display.resolution} @ {display.refreshRate}Hz</p>
-                          </div>
-                        </div>
-                        {display.isMain && <span className="text-[8px] font-black uppercase tracking-widest px-2 py-1 bg-amber-500/10 text-amber-500 rounded-md border border-amber-500/20">Main</span>}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Projection Modes */}
-                  <div className="grid grid-cols-2 gap-2 mt-4">
-                    <button 
-                      onClick={() => executeControl("set-display-mode", "internal")}
-                      className="flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
-                    >
-                      <Monitor className="w-5 h-5 mb-2 text-zinc-500 group-hover:text-amber-500" />
-                      <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">PC Screen Only</span>
-                    </button>
-                    <button 
-                      onClick={() => executeControl("set-display-mode", "clone")}
-                      className="flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
-                    >
-                      <div className="relative mb-2">
-                        <Monitor className="w-5 h-5 text-zinc-500 group-hover:text-amber-500" />
-                        <Monitor className="w-3 h-3 text-zinc-500 group-hover:text-amber-500 absolute -bottom-1 -right-1 bg-zinc-950 rounded-sm" />
-                      </div>
-                      <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Duplicate</span>
-                    </button>
-                    <button 
-                      onClick={() => executeControl("set-display-mode", "extend")}
-                      className="flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
-                    >
-                      <div className="flex gap-1 mb-2">
-                        <Monitor className="w-5 h-5 text-zinc-500 group-hover:text-amber-500" />
-                        <div className="w-2 h-5 bg-zinc-700/50 rounded-sm" />
-                      </div>
-                      <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Extend</span>
-                    </button>
-                    <button 
-                      onClick={() => executeControl("set-display-mode", "external")}
-                      className="flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
-                    >
-                      <ExternalLink className="w-5 h-5 mb-2 text-zinc-500 group-hover:text-amber-500" />
-                      <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Second Screen Only</span>
-                    </button>
-                  </div>
+          {/* Secondary Controls - Routing & Displays */}
+          <div className={cn("grid lg:grid-cols-2 gap-8 transition-all duration-700 relative", !isUnlocked && "blur-[10px] pointer-events-none opacity-40 select-none grayscale z-0")}>
+            {/* Audio Output Router */}
+            <section className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md flex flex-col">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                  <Music className="w-5 h-5" />
                 </div>
+                <div>
+                  <h3 className="font-bold font-sora">Audio Routing</h3>
+                  <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest">Output Selection</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-2">
+                {status?.audioDevices && status.audioDevices.length > 0 ? (
+                  status.audioDevices.map((device) => (
+                    <button
+                      key={device.Index}
+                      onClick={() => {
+                        executeControl("set-audio-device", device.Index);
+                        setTimeout(() => fetchStatus(true), 1500);
+                      }}
+                      className={cn(
+                        "flex items-center justify-between p-4 rounded-2xl border transition-all text-left",
+                        device.Default
+                          ? "bg-primary/10 border-primary/30 shadow-[0_0_15px_rgba(245,158,11,0.1)]"
+                          : "bg-zinc-800/30 border-white/5 hover:bg-zinc-800/50 hover:border-white/10"
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={cn("w-2 h-2 rounded-full", device.Default ? "bg-primary shadow-[0_0_10px_rgba(245,158,11,1)]" : "bg-zinc-600")} />
+                        <span className={cn("text-xs font-bold font-sora", device.Default ? "text-primary" : "text-zinc-400")}>
+                          {device.Name}
+                        </span>
+                      </div>
+                      {device.Default && <span className="text-[8px] font-black uppercase tracking-widest text-primary/70">Active</span>}
+                    </button>
+                  ))
+                ) : (
+                  <div className="p-8 text-center text-zinc-600 text-xs italic">No playback devices detected</div>
+                )}
+              </div>
+            </section>
+
+            {/* Display Management */}
+            <section className="p-8 rounded-[3rem] bg-zinc-900/20 border border-white/5 space-y-6 backdrop-blur-md flex flex-col">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500">
+                  <Monitor className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold font-sora">Display Management</h3>
+                  <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest">Connected Monitors</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 gap-2">
+                {status?.displays?.map((display, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-zinc-800/30 border border-white/5">
+                    <div className="flex items-center gap-3">
+                      <div className={cn("p-2 rounded-lg", display.isMain ? "bg-amber-500/20 text-amber-500" : "bg-zinc-700/30 text-zinc-500")}>
+                        <Monitor className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold font-sora text-white truncate max-w-[150px]">{display.name}</p>
+                        <p className="text-[8px] font-medium text-zinc-500 uppercase tracking-widest">{display.resolution} @ {display.refreshRate}Hz</p>
+                      </div>
+                    </div>
+                    {display.isMain && <span className="text-[8px] font-black uppercase tracking-widest px-2 py-1 bg-amber-500/10 text-amber-500 rounded-md border border-amber-500/20">Main</span>}
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-auto">
+                <button 
+                  onClick={() => executeControl("set-display-mode", "internal")}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
+                  title="PC Screen Only"
+                >
+                  <Monitor className="w-4 h-4 mb-1 text-zinc-500 group-hover:text-amber-500" />
+                  <span className="text-[7px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">PC Only</span>
+                </button>
+                <button 
+                  onClick={() => executeControl("set-display-mode", "clone")}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
+                  title="Duplicate"
+                >
+                  <div className="relative mb-1">
+                    <Monitor className="w-4 h-4 text-zinc-500 group-hover:text-amber-500" />
+                    <Monitor className="w-2 h-2 text-zinc-500 group-hover:text-amber-500 absolute -bottom-0.5 -right-0.5 bg-zinc-950 rounded-sm" />
+                  </div>
+                  <span className="text-[7px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Duplicate</span>
+                </button>
+                <button 
+                  onClick={() => executeControl("set-display-mode", "extend")}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
+                  title="Extend"
+                >
+                  <div className="flex gap-0.5 mb-1">
+                    <Monitor className="w-4 h-4 text-zinc-500 group-hover:text-amber-500" />
+                    <div className="w-1.5 h-4 bg-zinc-700/50 rounded-sm" />
+                  </div>
+                  <span className="text-[7px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Extend</span>
+                </button>
+                <button 
+                  onClick={() => executeControl("set-display-mode", "external")}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-zinc-800/30 border border-white/5 hover:bg-amber-500/5 hover:border-amber-500/20 transition-all group"
+                  title="Second Screen Only"
+                >
+                  <ExternalLink className="w-4 h-4 mb-1 text-zinc-500 group-hover:text-amber-500" />
+                  <span className="text-[7px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-white">Second</span>
+                </button>
               </div>
             </section>
           </div>
