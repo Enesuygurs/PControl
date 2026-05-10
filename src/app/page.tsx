@@ -1315,12 +1315,31 @@ export default function ControlPanel() {
               {isSetupMode ? "Create a 4-digit PIN to secure your dashboard" : "Enter PIN to access advanced system controls"}
             </p>
             <div className="flex flex-col items-center w-full">
-              <div className="w-full">
-                <div className="flex items-center justify-center gap-6 bg-zinc-900/50 border border-white/10 rounded-2xl py-6 transition-all">
-                  {[...Array(4)].map((_, i) => (
-                    <div key={i} className={cn("w-3 h-3 rounded-full transition-all duration-300", pinInput.length > i ? "bg-white scale-125 shadow-[0_0_15px_rgba(255,255,255,0.4)]" : "bg-white/10 scale-100")} />
-                  ))}
-                </div>
+              <div className="w-full relative flex flex-col items-center">
+                <input
+                  id="pin-input"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={4}
+                  autoFocus
+                  placeholder="••••"
+                  value={pinInput}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/[^0-9]/g, "");
+                    setPinInput(val);
+                    if (val.length === 4) {
+                      setTimeout(() => submitPin(val), 100);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape" && !isSetupMode) {
+                      setShowPinPad(false);
+                      setPinInput("");
+                    }
+                  }}
+                  className="w-full bg-zinc-900/80 border border-white/10 rounded-2xl py-4 text-center text-3xl tracking-[0.5em] font-black text-white focus:outline-none focus:border-primary/50 transition-all font-mono placeholder:text-zinc-700"
+                />
               </div>
               <p className="mt-3 text-[9px] text-zinc-600 font-medium tracking-wider uppercase">Type digits on your keyboard</p>
               <button onClick={() => submitPin(pinInput)} className={cn("mt-4 w-full py-4 rounded-2xl transition-colors text-white text-[10px] font-black uppercase tracking-widest shadow-lg", isSetupMode ? "bg-primary hover:bg-primary/80 shadow-primary/20" : "bg-red-500 hover:bg-red-600 shadow-red-500/20")}>
